@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a481eff2-fded-48a0-a107-e25e081b7e88"
+      }
+    },
+    "owner": "cancillervevo"
   }
 }
