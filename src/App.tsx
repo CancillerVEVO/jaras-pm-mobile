@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { TestDb } from "./TestDb";
 import { useEffect, useState } from "react";
+import Products from "./Components/Products";
 
 // Do not call db from here, it will not work!!!
 
@@ -30,16 +31,10 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <View style={styles.container}>
-        <TestDb />
-        <View
-          style={{ width: 50, height: 50, backgroundColor: "powderblue" }}
-        />
-        <View style={{ width: 100, height: 100, backgroundColor: "skyblue" }} />
-        <View
-          style={{ width: 150, height: 150, backgroundColor: "steelblue" }}
-        />
-        <StatusBar style="auto" />
+      <View style={
+        styles.container
+      }>
+      <Products/>
       </View>
     </QueryClientProvider>
   );
