@@ -1,12 +1,14 @@
 /* Tabla de productos */
+DROP TABLE IF EXISTS Products;
 CREATE TABLE IF NOT EXISTS Products (
     id INTEGER PRIMARY KEY,
-    price DECIMAL,
+    price NUMERIC,
     name TEXT,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
 /* Tabla de estatus de la sesion */ 
+DROP TABLE IF EXISTS Session_Status;
 CREATE TABLE IF NOT EXISTS Session_Status (
     id INTEGER PRIMARY KEY,
     description TEXT
@@ -18,36 +20,40 @@ INSERT INTO Session_Status (id, description) VALUES (2, 'Activa');
 INSERT INTO Session_Status (id, description) VALUES (3, 'Cerrada');
 
 /* Tabla de sesiones de venta */
+DROP TABLE IF EXISTS Selling_Session;
 CREATE TABLE IF NOT EXISTS Selling_Session (
     id INTEGER PRIMARY KEY,
     name TEXT,
     session_status_id INTEGER,
-    created_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (session_status_id) REFERENCES Session_Status(id)
 );
 
 /* Tabla de productos en sesion de venta */
+DROP TABLE IF EXISTS Selling_Session_Products;
 CREATE TABLE IF NOT EXISTS Selling_Session_Products (
     id INTEGER PRIMARY KEY,
     selling_session_id INTEGER,
     product_type_id INTEGER,
-    created_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (selling_session_id) REFERENCES Selling_Session(id),
     FOREIGN KEY (product_type_id) REFERENCES Products(id)
 );
 
 /* Tabla de ventas */
+DROP TABLE IF EXISTS Session_Product_Sales;
 CREATE TABLE IF NOT EXISTS Session_Product_Sales (
     id INTEGER PRIMARY KEY,
     selling_session_product_id INTEGER,
     product_name TEXT,
-    sale_price DECIMAL,
+    sale_price NUMERIC,
     sale_date DATETIME,
     FOREIGN KEY (selling_session_product_id) REFERENCES Selling_Session_Products(id)
 );
 
 
 /* Tabla de tipos de eventos */
+DROP TABLE IF EXISTS Event_Type;
 CREATE TABLE IF NOT EXISTS Event_Type (
     id INTEGER PRIMARY KEY,
     name TEXT
@@ -61,11 +67,12 @@ INSERT INTO Event_Type (id, name) VALUES (4, 'Producto vendido');
 
 
 /* Tabla de eventos */
+DROP TABLE IF EXISTS Events;
 CREATE TABLE IF NOT EXISTS Events (
     id INTEGER PRIMARY KEY,
     event_type_id INTEGER,
     description TEXT,
-    created_at DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (event_type_id) REFERENCES Event_Type(id)
 );
     

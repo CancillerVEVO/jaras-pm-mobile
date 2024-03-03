@@ -1,25 +1,68 @@
+import { StackScreenProps } from "@react-navigation/stack";
+import { useProduct } from "../hooks/useProduct";
 import { ScrollView, View } from "react-native";
 import { Input } from "@/Components/Input";
 import { useForm, Controller } from "react-hook-form";
+import { useEffect } from "react";
 import { Button } from "@/Components/Button";
 import { Text } from "@/Components/Text";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateProductSchema, useCreateProduct } from "../hooks/useCreateProduct";
+import { EditProductSchema, useEditProduct } from "../hooks/useEditProduct";
 
-export function CreateProductScreen() {
-  const mutation = useCreateProduct();
+export function EditProductScreen({ route }: StackScreenProps<any>) {
+  const query = useProduct(route.params?.id as number);
+  const mutation = useEditProduct(route.params?.id as number);
+
+  const data = query.data;
 
   const form = useForm({
     defaultValues: {
-      name: "",
-      price: "",
+      name: data?.name ?? "",
+      price: data?.price ? data.price.toString() : "",
     },
-    resolver: zodResolver(CreateProductSchema),
+    resolver: zodResolver(EditProductSchema),
   });
 
-  const { handleSubmit, control, formState } = form;
+  const { handleSubmit, control, reset, formState } = form;
 
   const onSubmit = mutation.mutate;
+
+  useEffect(() => {
+    if (query.isFetchedAfterMount) {
+      reset({
+        name: data?.name ?? "",
+        price: data?.price ? data.price.toString() : "",
+      });
+    }
+  }, [query.isFetchedAfterMount, data, reset]);
+
+  if (query.isLoading) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text>Cargando...</Text>
+      </View>
+    );
+  }
+
+  if (!data) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Text>Producto no encontrado</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView
@@ -76,11 +119,15 @@ export function CreateProductScreen() {
         <Text style={{ color: "red" }}>{mutation.error.message}</Text>
       )}
 
+      {mutation.isSuccess && (
+        <Text style={{ color: "green" }}>Producto actualizado</Text>
+      )}
+
       <Button
         onPress={handleSubmit(onSubmit as any)}
         disabled={mutation.isPending || !formState.isDirty}
       >
-        Crear
+        Guardar
       </Button>
     </ScrollView>
   );
