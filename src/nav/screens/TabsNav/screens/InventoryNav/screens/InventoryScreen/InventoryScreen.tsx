@@ -46,7 +46,7 @@ export function InventoryScreen({ navigation }: StackScreenProps<any>) {
 function ItemSeparator() {
   return (
     <View
-      style={{ height: 1, backgroundColor: "lightgray", marginHorizontal: 20 }}
+      style={{ height: 1, backgroundColor: "gray", marginHorizontal: 20 }}
     />
   );
 }
