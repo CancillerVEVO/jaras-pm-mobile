@@ -2,9 +2,17 @@ import { db } from "@/db";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 
+export const EditProductSchema = z.object({
+  product_id: z.number(),
+  quantity: z.string().pipe(z.coerce.number().int()),
+  name: z.string(),
+  price: z.number(),
+});
+
 export const EditSessionSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
   session_status_id: z.number(),
+  products: EditProductSchema.array(),
 });
 
 function editSession(id: number, data: z.output<typeof EditSessionSchema>) {
@@ -14,7 +22,39 @@ function editSession(id: number, data: z.output<typeof EditSessionSchema>) {
         `UPDATE "Selling_Session" as p SET name = ?, session_status_id = ? WHERE p.id = ?`,
         [data.name, data.session_status_id, id],
         (_, { rowsAffected }) => {
-          rowsAffected ? resolve() : reject(new Error("No se pudo editar la sesión"));
+          rowsAffected
+            ? resolve()
+            : reject(new Error("No se pudo editar la sesión"));
+        },
+        (tx, err): boolean | any => {
+          reject(err);
+        }
+      );
+
+      tx.executeSql(
+        `DELETE FROM "Selling_Session_Products" WHERE selling_session_id = ?`,
+        [id],
+        (_, { rowsAffected }) => {
+          const values = data.products.map((product) => [
+            id,
+            product.product_id,
+            product.quantity,
+          ]);
+
+          tx.executeSql(
+            `INSERT INTO "Selling_Session_Products" (selling_session_id, product_id, quantity) VALUES ${values
+              .map(() => "(?, ?, ?)")
+              .join(", ")}`,
+            values.flat(),
+            (_, { rowsAffected }) => {
+              rowsAffected
+                ? resolve()
+                : reject(new Error("No se pudieron guardar los productos"));
+            },
+            (tx, err): boolean | any => {
+              reject(err);
+            }
+          );
         },
         (tx, err): boolean | any => {
           reject(err);

@@ -85,6 +85,7 @@ export function EditProductScreen({ route }: StackScreenProps<any>) {
               value={value}
               onChangeText={onChange}
               placeholder="Nombre del producto"
+              autoFocus
             />
 
             {error && <Text style={{ color: "red" }}>{error.message}</Text>}

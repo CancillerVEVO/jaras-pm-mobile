@@ -1,17 +1,36 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import { useSession } from "../hooks/useSession";
-import { ScrollView, TouchableOpacity, View } from "react-native";
+import { SessionDetail, useSession } from "../hooks/useSession";
+import { Alert, ScrollView, TouchableOpacity, View } from "react-native";
 import { Input } from "@/Components/Input";
-import { useForm, Controller } from "react-hook-form";
-import { Fragment, useEffect } from "react";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
+import React, { Fragment, useEffect, useMemo } from "react";
 import { Button } from "@/Components/Button";
 import { Text } from "@/Components/Text";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { EditSessionSchema, useEditSession } from "../hooks/useEditSession";
+import {
+  EditProductSchema,
+  EditSessionSchema,
+  useEditSession,
+} from "../hooks/useEditSession";
 import { useTheme } from "@react-navigation/native";
 import { z } from "zod";
-import { useProducts } from "../hooks/useProducts";
 import { Select, SelectItem } from "@/Components/Select";
+import { AntDesign } from "@expo/vector-icons";
+
+function getDefaultValues(
+  data: SessionDetail | undefined | null
+): z.input<typeof EditSessionSchema> {
+  return {
+    name: data?.name ?? "",
+    session_status_id: data?.session_status_id ?? 1,
+    products: data?.products
+      ? data.products.map((product) => ({
+          ...product,
+          quantity: product.quantity.toString(),
+        }))
+      : [],
+  };
+}
 
 export function EditSessionScreen({
   route,
@@ -23,29 +42,35 @@ export function EditSessionScreen({
   const query = useSession(id);
   const mutation = useEditSession(id);
 
-  const productsQuery = useProducts(id);
-  const products = productsQuery.data;
-
   const data = query.data;
 
   const form = useForm<z.input<typeof EditSessionSchema>>({
-    defaultValues: {
-      name: data?.name ?? "",
-      session_status_id: data?.session_status_id ?? 1,
-    },
+    defaultValues: getDefaultValues(data),
     resolver: zodResolver(EditSessionSchema),
   });
 
-  const { handleSubmit, control, reset, formState } = form;
+  const { handleSubmit, control, reset } = form;
+
+  const { fields, append, remove, update } = useFieldArray({
+    control,
+    name: "products",
+  });
+
+  const total = useMemo(() => {
+    return fields.reduce((acc, { quantity, price }) => {
+      return acc + parseInt(quantity, 10) * price;
+    }, 0);
+  }, [fields]);
+
+  const exclude = useMemo(() => {
+    return fields.map((product) => product.product_id);
+  }, [fields]);
 
   const onSubmit = mutation.mutate;
 
   useEffect(() => {
     if (query.isFetchedAfterMount) {
-      reset({
-        name: data?.name ?? "",
-        session_status_id: data?.session_status_id ?? 1,
-      });
+      reset(getDefaultValues(data));
     }
   }, [query.isFetchedAfterMount, data, reset]);
 
@@ -94,10 +119,10 @@ export function EditSessionScreen({
             }}
           >
             <Input
-              label="Ponle un nombre a tu producto:"
+              label="Nombre de la sesión"
               value={value}
               onChangeText={onChange}
-              placeholder="Nombre del producto"
+              placeholder="Nombre de la sesión"
             />
 
             {error && <Text style={{ color: "red" }}>{error.message}</Text>}
@@ -118,6 +143,18 @@ export function EditSessionScreen({
               label="Estatus"
               value={value}
               onChange={onChange}
+              getLabel={(value) => {
+                switch (value) {
+                  case 1:
+                    return "Editable";
+                  case 2:
+                    return "Activada";
+                  case 3:
+                    return "Finalizada";
+                }
+
+                return "";
+              }}
             >
               <SelectItem label="Editable" value={1} />
               <SelectItem label="Activada" value={2} />
@@ -150,7 +187,13 @@ export function EditSessionScreen({
           </Text>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate("AddProductToSessionScreen")}
+            onPress={() =>
+              navigation.navigate("AddProductScreen", {
+                exclude,
+                onAdd: (product: z.input<typeof EditProductSchema>) =>
+                  append(product),
+              })
+            }
           >
             <Text style={{ color: theme.colors.primary }}>
               Agregar producto
@@ -159,15 +202,48 @@ export function EditSessionScreen({
         </View>
 
         <View>
-          {products?.map((product, index) => (
-            <Fragment key={product.id}>
-              <TouchableOpacity>
-                <View
+          {fields?.map((product, index) => {
+            return (
+              <View
+                key={product.id}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 20,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    Alert.alert("Eliminar producto", "¿Estás seguro?", [
+                      {
+                        text: "Cancelar",
+                        style: "cancel",
+                        },
+                        {
+                          text: "Eliminar",
+                          style: "destructive",
+                          onPress: () => remove(index),
+                        },
+                      ]);
+                  }}
+                >
+                  <AntDesign name="closecircle" size={24} color="red" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
                   style={{
+                    flex: 1,
                     flexDirection: "row",
                     paddingVertical: 20,
                     gap: 20,
                   }}
+                  onPress={() =>
+                    navigation.navigate("EditAddedProductScreen", {
+                      product,
+                      onEdit: (product: z.input<typeof EditProductSchema>) =>
+                        update(index, product),
+                    })
+                  }
                 >
                   <Text
                     numberOfLines={1}
@@ -178,21 +254,44 @@ export function EditSessionScreen({
                     {product.name}
                   </Text>
                   <Text>
-                    {product.count} x $ {product.price}
+                    {product.quantity} x $ {product.price}
                   </Text>
-                  <Text>${product.price * product.count}</Text>
-                </View>
-              </TouchableOpacity>
-              {index !== products.length - 1 ? (
+                  <Text>
+                    $ {parseInt(product.quantity, 10) * product.price}
+                  </Text>
+                </TouchableOpacity>
                 <View
                   style={{
                     height: 1,
                     backgroundColor: "gray",
                   }}
                 />
-              ) : null}
-            </Fragment>
-          ))}
+              </View>
+            );
+          })}
+
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              paddingVertical: 20,
+            }}
+          >
+            <Text
+              style={{
+                fontWeight: "600",
+              }}
+            >
+              Total
+            </Text>
+            <Text
+              style={{
+                fontWeight: "600",
+              }}
+            >
+              $ {total}
+            </Text>
+          </View>
         </View>
       </View>
 
@@ -208,7 +307,7 @@ export function EditSessionScreen({
 
       <Button
         onPress={handleSubmit(onSubmit as any)}
-        disabled={mutation.isPending || !formState.isDirty}
+        disabled={mutation.isPending}
       >
         Guardar
       </Button>

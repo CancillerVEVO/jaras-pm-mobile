@@ -7,6 +7,9 @@ CREATE TABLE IF NOT EXISTS Products (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
+INSERT INTO Products (id, price, name) VALUES (1, 100, 'Naranjas');
+INSERT INTO Products (id, price, name) VALUES (2, 200, 'Manzanas');
+
 /* Tabla de estatus de la sesion */ 
 DROP TABLE IF EXISTS Session_Status;
 CREATE TABLE IF NOT EXISTS Session_Status (
@@ -29,16 +32,22 @@ CREATE TABLE IF NOT EXISTS Selling_Session (
     FOREIGN KEY (session_status_id) REFERENCES Session_Status(id)
 );
 
+INSERT INTO Selling_Session (id, name, session_status_id) VALUES (1, 'Sesión 1', 1);
+
 /* Tabla de productos en sesion de venta */
 DROP TABLE IF EXISTS Selling_Session_Products;
 CREATE TABLE IF NOT EXISTS Selling_Session_Products (
     id INTEGER PRIMARY KEY,
     selling_session_id INTEGER,
-    product_type_id INTEGER,
+    product_id INTEGER,
+    quantity INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (selling_session_id) REFERENCES Selling_Session(id),
-    FOREIGN KEY (product_type_id) REFERENCES Products(id)
+    FOREIGN KEY (product_id) REFERENCES Products(id)
 );
+
+INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (1, 1, 1, 10);
+INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (2, 1, 2, 5);
 
 /* Tabla de ventas */
 DROP TABLE IF EXISTS Session_Product_Sales;

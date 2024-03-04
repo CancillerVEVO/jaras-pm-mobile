@@ -42,6 +42,7 @@ export function CreateProductScreen() {
               value={value}
               onChangeText={onChange}
               placeholder="Nombre del producto"
+              autoFocus
             />
 
             {error && <Text style={{ color: "red" }}>{error.message}</Text>}

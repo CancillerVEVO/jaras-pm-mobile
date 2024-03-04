@@ -1,6 +1,7 @@
 import React, { Children, cloneElement, ReactElement } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { Modal, Pressable, TouchableOpacity, View } from "react-native";
 import { Text } from "../Text";
+import { useTheme } from "@react-navigation/native";
 
 export interface SelectItemProps {
   value: any;
@@ -20,6 +21,7 @@ export function SelectItem(props: SelectItemProps) {
       onPress={() => onSelect(value)}
       style={{
         paddingVertical: 10,
+        paddingHorizontal: 20,
       }}
     >
       <View>
@@ -36,30 +38,87 @@ export interface SelectProps {
   onChange: (value: any) => void;
   children: ReactElement<SelectItemProps>[];
   label: string;
+  getLabel: (value: any) => string;
 }
 
-export function Select({ value, onChange, children, label }: SelectProps) {
-  return (
-    <View
-      style={{
-        gap: 10,
-      }}
-    >
-      <Text style={{ fontWeight: "600" }}>{label}</Text>
+export function Select({
+  value,
+  onChange,
+  children,
+  label,
+  getLabel,
+}: SelectProps) {
+  const theme = useTheme();
+  const [isOpen, setIsOpen] = React.useState(false);
 
-      <View>
-        {Children.map(children, (child) => {
-          if (child) {
-            return cloneElement(
-              child as ReactElement<InternalSelectItemProps>,
-              {
-                isSelected: child.props.value === value,
-                onSelect: onChange,
+  return (
+    <>
+      <TouchableOpacity onPress={() => setIsOpen(true)}>
+        <Text style={{ fontWeight: "600" }}>{label}</Text>
+
+        <View
+          style={{
+            borderBottomWidth: 1,
+            borderBottomColor: theme.colors.text,
+            paddingVertical: 10,
+          }}
+        >
+          <Text style={{ color: value ? theme.colors.text : "gray" }}>
+            {getLabel(value)}
+          </Text>
+        </View>
+      </TouchableOpacity>
+
+      <Modal
+        visible={isOpen}
+        animationType="none"
+        transparent
+        statusBarTranslucent
+      >
+        <Pressable
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+          }}
+          onPress={() => setIsOpen(false)}
+        >
+          <Pressable
+            style={{
+              width: "80%",
+              backgroundColor: theme.colors.card,
+              paddingVertical: 20,
+              borderRadius: 10,
+            }}
+          >
+            <Text
+              style={{
+                marginHorizontal: 20,
+                fontWeight: "600",
+                marginBottom: 10,
+              }}
+            >
+              {label}
+            </Text>
+
+            {Children.map(children, (child) => {
+              if (child) {
+                return cloneElement(
+                  child as ReactElement<InternalSelectItemProps>,
+                  {
+                    isSelected: child.props.value === value,
+                    onSelect: (value: any) => {
+                      onChange(value);
+                      setIsOpen(false);
+                    },
+                  }
+                );
               }
-            );
-          }
-        })}
-      </View>
-    </View>
+            })}
+          </Pressable>
+        </Pressable>
+      </Modal>
+    </>
   );
 }

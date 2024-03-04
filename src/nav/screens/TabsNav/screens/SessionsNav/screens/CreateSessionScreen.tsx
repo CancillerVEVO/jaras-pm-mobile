@@ -42,10 +42,10 @@ export function CreateSessionScreen() {
             }}
           >
             <Input
-              label="Ponle un nombre a tu producto:"
+              label="Ponle un nombre a la sesión"
               value={value}
               onChangeText={onChange}
-              placeholder="Nombre del producto"
+              placeholder="Nombre de la sesión"
             />
 
             {error && <Text style={{ color: "red" }}>{error.message}</Text>}
