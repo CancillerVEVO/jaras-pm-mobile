@@ -1,3 +1,5 @@
+import { Text } from "@/Components/Text";
 export function SettingsScreen() {
-  return null;
+  return <Text>SettingsScreen</Text>;
+
 }

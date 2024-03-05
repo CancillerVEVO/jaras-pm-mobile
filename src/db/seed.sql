@@ -65,14 +65,15 @@ CREATE TABLE IF NOT EXISTS Session_Product_Sales (
 DROP TABLE IF EXISTS Event_Type;
 CREATE TABLE IF NOT EXISTS Event_Type (
     id INTEGER PRIMARY KEY,
-    name TEXT
+    name TEXT,
+    color TEXT
 );
 
 -- Insertar tipos de eventos
-INSERT INTO Event_Type (id, name) VALUES (1, 'Sesión creada');
-INSERT INTO Event_Type (id, name) VALUES (2, 'Sesión activada');
-INSERT INTO Event_Type (id, name) VALUES (3, 'Sesión cerrada');
-INSERT INTO Event_Type (id, name) VALUES (4, 'Producto vendido');
+INSERT INTO Event_Type (id, name, color) VALUES (1, 'Sesión creada', '#4CAF50');
+INSERT INTO Event_Type (id, name, color) VALUES (2, 'Sesión activada', '#2196F3');
+INSERT INTO Event_Type (id, name, color) VALUES (3, 'Sesión cerrada', '#D32F2F');
+INSERT INTO Event_Type (id, name, color) VALUES (4, 'Producto vendido', '#ED733C');
 
 
 /* Tabla de eventos */
@@ -85,3 +86,11 @@ CREATE TABLE IF NOT EXISTS Events (
     FOREIGN KEY (event_type_id) REFERENCES Event_Type(id)
 );
     
+/* Tabla de Configuracion Sheets */
+DROP TABLE IF EXISTS Sheets_Config;
+CREATE TABLE IF NOT EXISTS Sheets_Config (
+    id INTEGER PRIMARY KEY,
+    sheet_url TEXT
+);
+
+INSERT INTO Sheets_Config (id, sheet_url) VALUES (1, 'https://docs.google.com/spreadsheets/d/1J');
