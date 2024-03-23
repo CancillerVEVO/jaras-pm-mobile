@@ -40,15 +40,14 @@ CREATE TABLE IF NOT EXISTS Selling_Session_Products (
     id INTEGER PRIMARY KEY,
     selling_session_id INTEGER,
     product_id INTEGER,
-    quantity INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (selling_session_id) REFERENCES Selling_Session(id),
     FOREIGN KEY (product_id) REFERENCES Products(id)
 );
 
-INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (1, 1, 1, 10);
+/* INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (1, 1, 1, 10);
 INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (2, 1, 2, 5);
-
+ */
 /* Tabla de ventas */
 DROP TABLE IF EXISTS Session_Product_Sales;
 CREATE TABLE IF NOT EXISTS Session_Product_Sales (
