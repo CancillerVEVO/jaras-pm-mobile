@@ -45,19 +45,29 @@ CREATE TABLE IF NOT EXISTS Selling_Session_Products (
     FOREIGN KEY (product_id) REFERENCES Products(id)
 );
 
-/* INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (1, 1, 1, 10);
-INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (2, 1, 2, 5);
- */
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 2);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 2);
+
 /* Tabla de ventas */
 DROP TABLE IF EXISTS Session_Product_Sales;
 CREATE TABLE IF NOT EXISTS Session_Product_Sales (
     id INTEGER PRIMARY KEY,
+    selling_session_id INTEGER,
     selling_session_product_id INTEGER,
     product_name TEXT,
     sale_price NUMERIC,
-    sale_date DATETIME,
+    sale_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (selling_session_id) REFERENCES Selling_Session(id),
     FOREIGN KEY (selling_session_product_id) REFERENCES Selling_Session_Products(id)
 );
+
+/* Insertar ventas */
+INSERT INTO Session_Product_Sales (selling_session_id, selling_session_product_id, product_name, sale_price) VALUES (1, 1, 'Naranjas', 100);
+INSERT INTO Session_Product_Sales (selling_session_id, selling_session_product_id, product_name, sale_price) VALUES (1, 2, 'Naranjas', 100);
+INSERT INTO Session_Product_Sales (selling_session_id, selling_session_product_id, product_name, sale_price) VALUES (1, 4, 'Manzana', 200);
 
 
 /* Tabla de tipos de eventos */
@@ -84,6 +94,9 @@ CREATE TABLE IF NOT EXISTS Events (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (event_type_id) REFERENCES Event_Type(id)
 );
+
+-- Insertar eventos
+INSERT INTO Events (event_type_id, description) VALUES (1, 'Se ha creado una nueva sesión de venta "Sesión 1"');
     
 /* Tabla de Configuracion Sheets */
 DROP TABLE IF EXISTS Sheets_Config;
