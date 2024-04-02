@@ -18,9 +18,8 @@ CREATE TABLE IF NOT EXISTS Session_Status (
 );
 
 -- Insertar estados de sesión
-INSERT INTO Session_Status (id, description) VALUES (1, 'Editable');
-INSERT INTO Session_Status (id, description) VALUES (2, 'Activa');
-INSERT INTO Session_Status (id, description) VALUES (3, 'Cerrada');
+INSERT INTO Session_Status (id, description) VALUES (1, 'Activa');
+INSERT INTO Session_Status (id, description) VALUES (2, 'Cerrada');
 
 /* Tabla de sesiones de venta */
 DROP TABLE IF EXISTS Selling_Session;
