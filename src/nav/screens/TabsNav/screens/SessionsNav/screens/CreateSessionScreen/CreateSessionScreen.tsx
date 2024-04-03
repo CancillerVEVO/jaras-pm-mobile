@@ -7,8 +7,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   CreateSessionSchema,
   useCreateSession,
-} from "../hooks/useCreateSession";
+} from "../../hooks/useCreateSession";
 import { z } from "zod";
+import { Products } from "./Products";
 
 export function CreateSessionScreen() {
   const mutation = useCreateSession();
@@ -17,11 +18,12 @@ export function CreateSessionScreen() {
     defaultValues: {
       name: "",
       session_status_id: 1,
+      products: [],
     },
     resolver: zodResolver(CreateSessionSchema),
   });
 
-  const { handleSubmit, control, formState } = form;
+  const { handleSubmit, control } = form;
 
   const onSubmit = mutation.mutate;
 
@@ -46,6 +48,7 @@ export function CreateSessionScreen() {
               value={value}
               onChangeText={onChange}
               placeholder="Nombre de la sesión"
+              editable={!mutation.isPending}
             />
 
             {error && <Text style={{ color: "red" }}>{error.message}</Text>}
@@ -54,18 +57,11 @@ export function CreateSessionScreen() {
         name="name"
       />
 
-      <Controller
-        control={control}
-        render={({ field: { onChange, value }, fieldState: { error } }) => (
-          <View
-            style={{
-              gap: 10,
-            }}
-          >
-            {error && <Text style={{ color: "red" }}>{error.message}</Text>}
-          </View>
-        )}
-        name="session_status_id"
+      <Products
+        controllerProps={{
+          control,
+          name: "products",
+        }}
       />
 
       {mutation.isError && (
@@ -74,7 +70,7 @@ export function CreateSessionScreen() {
 
       <Button
         onPress={handleSubmit(onSubmit as any)}
-        disabled={mutation.isPending || !formState.isDirty}
+        disabled={mutation.isPending}
       >
         Crear
       </Button>

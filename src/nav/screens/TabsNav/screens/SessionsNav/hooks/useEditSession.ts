@@ -4,16 +4,20 @@ import { z } from "zod";
 
 export const EditProductSchema = z.object({
   product_id: z.number(),
-  quantity: z.string().pipe(z.coerce.number().int()),
+  quantity: z.number().int(),
   name: z.string(),
   price: z.number(),
 });
+
+export type EditProductSchema = z.input<typeof EditProductSchema>;
 
 export const EditSessionSchema = z.object({
   name: z.string().min(1, "El nombre es requerido"),
   session_status_id: z.number(),
   products: EditProductSchema.array(),
 });
+
+export type EditSessionSchema = z.input<typeof EditSessionSchema>;
 
 function editSession(id: number, data: z.output<typeof EditSessionSchema>) {
   return new Promise<void>((resolve, reject) => {
@@ -26,40 +30,40 @@ function editSession(id: number, data: z.output<typeof EditSessionSchema>) {
             ? resolve()
             : reject(new Error("No se pudo editar la sesión"));
         },
-        (tx, err): boolean | any => {
+        (_tx, err): boolean | any => {
           reject(err);
-        }
-      );
-
-      tx.executeSql(
-        `DELETE FROM "Selling_Session_Products" WHERE selling_session_id = ?`,
-        [id],
-        (_, { rowsAffected }) => {
-          const values = data.products.map((product) => [
-            id,
-            product.product_id,
-            product.quantity,
-          ]);
-
-          tx.executeSql(
-            `INSERT INTO "Selling_Session_Products" (selling_session_id, product_id, quantity) VALUES ${values
-              .map(() => "(?, ?, ?)")
-              .join(", ")}`,
-            values.flat(),
-            (_, { rowsAffected }) => {
-              rowsAffected
-                ? resolve()
-                : reject(new Error("No se pudieron guardar los productos"));
-            },
-            (tx, err): boolean | any => {
-              reject(err);
-            }
-          );
         },
-        (tx, err): boolean | any => {
-          reject(err);
-        }
       );
+
+      // tx.executeSql(
+      //   `DELETE FROM "Selling_Session_Products" WHERE selling_session_id = ?`,
+      //   [id],
+      //   () => {
+      //     const values = data.products.map((product) => [
+      //       id,
+      //       product.product_id,
+      //       product.quantity,
+      //     ]);
+      //
+      //     tx.executeSql(
+      //       `INSERT INTO "Selling_Session_Products" (selling_session_id, product_id, quantity) VALUES ${values
+      //         .map(() => "(?, ?, ?)")
+      //         .join(", ")}`,
+      //       values.flat(),
+      //       (_, { rowsAffected }) => {
+      //         rowsAffected
+      //           ? resolve()
+      //           : reject(new Error("No se pudieron guardar los productos"));
+      //       },
+      //       (_tx, err): boolean | any => {
+      //         reject(err);
+      //       },
+      //     );
+      //   },
+      //   (_tx, err): boolean | any => {
+      //     reject(err);
+      //   },
+      // );
     });
   });
 }

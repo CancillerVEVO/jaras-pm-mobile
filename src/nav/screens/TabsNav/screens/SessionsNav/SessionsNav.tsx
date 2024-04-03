@@ -2,8 +2,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { SessionsScreen } from "./screens/SessionsScreen";
 import { CreateSessionScreen } from "./screens/CreateSessionScreen";
 import { EditSessionScreen } from "./screens/EditSessionScreen";
-import { AddProductScreen } from "./screens/AddProductScreen";
-import { EditAddedProductScreen } from "./screens/EditAddedProductScreen/EditAddedProductScreen";
+import { EditProductScreen } from "./screens/EditProductScreen";
 
 const Stack = createStackNavigator();
 const Navigator = Stack.Navigator;
@@ -34,15 +33,8 @@ export function SessionsNav() {
         }}
       />
       <Screen
-        name="AddProductScreen"
-        component={AddProductScreen}
-        options={{
-          title: "Añadir producto",
-        }}
-      />
-      <Screen
-        name="EditAddedProductScreen"
-        component={EditAddedProductScreen}
+        name="EditProductScreen"
+        component={EditProductScreen}
         options={{
           title: "Editar producto",
         }}

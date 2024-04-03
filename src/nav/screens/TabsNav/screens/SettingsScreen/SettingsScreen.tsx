@@ -1,6 +1,7 @@
 import { Text } from "@/Components/Text";
-import { View, TextInput, StyleSheet, Button } from "react-native";
+import { View, TextInput, StyleSheet } from "react-native";
 import { useConfig } from "./hooks/useSettings";
+import { Button } from "@/Components/Button";
 export function SettingsScreen() {
   const query = useConfig();
   const data = query.data ?? [];
@@ -33,11 +34,12 @@ export function SettingsScreen() {
       <View style={styles.buttonContainer}>
         <View style={styles.button}>
           <Button
-            title="Guardar"
             onPress={() => {
               // Agrega aquí la lógica para guardar la configuración
             }}
-          />
+          >
+            Guardar
+          </Button>
         </View>
       </View>
     </View>

@@ -39,17 +39,33 @@ CREATE TABLE IF NOT EXISTS Selling_Session_Products (
     id INTEGER PRIMARY KEY,
     selling_session_id INTEGER,
     product_id INTEGER,
+<<<<<<< Updated upstream
+=======
+    -- quantity INTEGER,
+>>>>>>> Stashed changes
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (selling_session_id) REFERENCES Selling_Session(id),
     FOREIGN KEY (product_id) REFERENCES Products(id)
 );
 
+<<<<<<< Updated upstream
 INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
 INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
 INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
 INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 2);
 INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 2);
 
+=======
+<<<<<<< Updated upstream
+/* INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (1, 1, 1, 10);
+INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (2, 1, 2, 5);
+ */
+=======
+-- INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (1, 1, 1, 10);
+-- INSERT INTO Selling_Session_Products (id, selling_session_id, product_id, quantity) VALUES (2, 1, 2, 5);
+
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 /* Tabla de ventas */
 DROP TABLE IF EXISTS Session_Product_Sales;
 CREATE TABLE IF NOT EXISTS Session_Product_Sales (

@@ -14,13 +14,29 @@ export type ProductSummary = {
   name: string;
   price: number;
   quantity: number;
+  totalPrice: number;
 };
 
 function getProducts(selling_session_id: number) {
   return new Promise<ProductSummary[]>((resolve, reject) => {
     db().readTransaction((tx) => {
       tx.executeSql(
-        `SELECT p.id as product_id, p.name, p.price, ssp.quantity from "Products" as p INNER JOIN "Selling_Session_Products" as ssp ON p.id = ssp.product_id WHERE ssp.selling_session_id = ? group by p.id`,
+        `
+SELECT
+    ssp.product_id,
+    p.name,
+    COUNT(ssp.product_id) AS quantity,
+    p.price AS price,
+    COUNT(ssp.product_id) * p.price AS total_price
+FROM
+    Selling_Session_Products ssp
+JOIN
+    Products p ON ssp.product_id = p.id
+WHERE
+    ssp.selling_session_id = ?
+GROUP BY
+    ssp.product_id, p.name, p.price;
+`,
         [selling_session_id],
         (_, { rows }) => {
           const products: ProductSummary[] = [];
@@ -29,9 +45,9 @@ function getProducts(selling_session_id: number) {
           }
           resolve(products);
         },
-        (tx, err): boolean | any => {
+        (_tx, err): boolean | any => {
           reject(err);
-        }
+        },
       );
     });
   });
@@ -46,14 +62,13 @@ function getSession(id: number) {
         (_, { rows }) => {
           resolve(rows.length ? rows.item(0) : null);
         },
-        (tx, err): boolean | any => {
+        (_tx, err): boolean | any => {
           reject(err);
-        }
+        },
       );
     });
   });
 }
-
 
 export function useSession(id: number) {
   return useQuery({
@@ -67,6 +82,6 @@ export function useSession(id: number) {
       }
 
       return null;
-    }
+    },
   });
 }

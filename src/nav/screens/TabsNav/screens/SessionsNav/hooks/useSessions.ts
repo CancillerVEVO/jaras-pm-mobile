@@ -15,15 +15,15 @@ function getSessions() {
         `SELECT * FROM "Selling_Session"`,
         [],
         (_, { rows }) => {
-          const Sessions: SessionSummary[] = [];
+          const data: SessionSummary[] = [];
           for (let i = 0; i < rows.length; i++) {
-            Sessions.push(rows.item(i));
+            data.push(rows.item(i));
           }
-          resolve(Sessions);
+          resolve(data);
         },
         (tx, err): boolean | any => {
           reject(err);
-        }
+        },
       );
     });
   });
