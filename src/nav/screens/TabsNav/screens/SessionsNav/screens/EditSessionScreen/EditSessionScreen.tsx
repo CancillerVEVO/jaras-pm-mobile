@@ -1,10 +1,11 @@
-import { Text } from '@/components/Text';
-import { StackScreenProps } from '@react-navigation/stack';
-import React, { useEffect } from 'react';
-import { ScrollView, View } from 'react-native';
-import { useEditSession } from '../../hooks/useEditSession';
-import { useSession } from '../../hooks/useSession';
-import { Products } from './Products';
+import { Text } from "@/components/Text";
+import { StackScreenProps } from "@react-navigation/stack";
+import React, { useEffect } from "react";
+import { ScrollView, View } from "react-native";
+import { useSession } from "../../hooks/useSession";
+import { Products } from "./Products";
+import { useDownloadPdf } from "../../hooks/useDownloadPdf";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export function EditSessionScreen({
   route,
@@ -13,23 +14,34 @@ export function EditSessionScreen({
   const id = route.params?.id as number;
 
   const query = useSession(id);
-  const mutation = useEditSession(id);
+
+  const mutation = useDownloadPdf(id);
 
   const data = query.data;
 
   useEffect(() => {
     navigation.setOptions({
-      title: data?.name ?? '',
+      title: data?.name ?? "",
+      headerRight: () => (
+        <TouchableOpacity
+          style={{
+            paddingEnd: 10,
+          }}
+          onPress={() => mutation.mutate()}
+        >
+          <Text>📑</Text>
+        </TouchableOpacity>
+      ),
     });
-  }, [navigation, data?.name]);
+  }, [navigation, data, mutation.mutate]);
 
   if (query.isLoading) {
     return (
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <Text>Cargando...</Text>
@@ -42,11 +54,11 @@ export function EditSessionScreen({
       <View
         style={{
           flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        <Text style={{ color: 'gray' }}>Sesión no encontrada</Text>
+        <Text style={{ color: "gray" }}>Sesión no encontrada</Text>
       </View>
     );
   }
