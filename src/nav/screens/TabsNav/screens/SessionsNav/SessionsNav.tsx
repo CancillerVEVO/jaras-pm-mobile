@@ -3,6 +3,7 @@ import { SessionsScreen } from "./screens/SessionsScreen";
 import { CreateSessionScreen } from "./screens/CreateSessionScreen";
 import { EditSessionScreen } from "./screens/EditSessionScreen";
 import { EditProductScreen } from "./screens/EditProductScreen";
+import { AddToSessionScreen } from "./screens/AddToSessionScreen";
 
 const Stack = createStackNavigator();
 const Navigator = Stack.Navigator;
@@ -37,6 +38,13 @@ export function SessionsNav() {
         component={EditProductScreen}
         options={{
           title: "Editar producto",
+        }}
+      />
+      <Screen
+        name="AddToSessionScreen"
+        component={AddToSessionScreen}
+        options={{
+          title: "Añadir a sesión",
         }}
       />
     </Navigator>

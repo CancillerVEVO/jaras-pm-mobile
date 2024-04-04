@@ -26,7 +26,12 @@ export function Products({ products }: { products: ProductSummary[] }) {
     });
   };
 
-  const onPressAdd = () => {};
+  const onPressAdd = () => {
+    navigation.navigate("AddToSessionScreen", {
+      selling_session_id,
+      exclude
+    });
+  };
 
   const total = useMemo(() => {
     return products.reduce((acc, { price, quantity }) => {
