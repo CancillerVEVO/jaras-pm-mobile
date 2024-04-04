@@ -54,18 +54,6 @@ export function AddToSessionScreen({
         return;
       }
 
-      console.log("Add to session", {
-        selling_session_id,
-        products: [
-          {
-            product_id: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: q,
-          },
-        ],
-      });
-
       setSelectedProduct(item);
     };
 
