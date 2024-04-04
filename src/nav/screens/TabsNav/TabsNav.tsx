@@ -4,6 +4,8 @@ import { EventsScreen } from "./screens/EventsScreen";
 import { InventoryNav } from "./screens/InventoryNav/InventoryNav";
 import { SettingsScreen } from "./screens/SettingsScreen";
 import { SessionsNav } from "./screens/SessionsNav/SessionsNav";
+import { ScannerScreen } from "./screens/ScannerScreen";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const Tabs = createBottomTabNavigator();
 const Navigator = Tabs.Navigator;
@@ -35,6 +37,17 @@ export function TabsNav() {
           ),
         }}
         component={SessionsNav}
+      />
+      <Screen
+        name="ScannerScreen"
+        options={{
+          headerShown: true,
+          title: "Escanear",
+          tabBarIcon: ({ color, size }) => (
+            <MaterialIcons name="qr-code-scanner" size={size} color={color} />
+          ),
+        }}
+        component={ScannerScreen}
       />
       <Screen
         name="EventsScreen"

@@ -20,14 +20,20 @@
       "infoPlist": {
         "UISupportsDocumentBrowser": true,
         "UIFileSharingEnabled": true,
-        "LSSupportsOpeningDocumentsInPlace": true
-      }
+        "LSSupportsOpeningDocumentsInPlace": true,
+        "NSCameraUsageDescription": "$(PRODUCT_NAME) needs access to your Camera."
+      },
+      "bundleIdentifier": "com.cancillervevo.jarasapp"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "package": "com.cancillervevo.jarasapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -37,6 +43,15 @@
         "projectId": "a481eff2-fded-48a0-a107-e25e081b7e88"
       }
     },
-    "owner": "cancillervevo"
+    "owner": "cancillervevo",
+    "plugins": [
+      [
+        "react-native-vision-camera",
+        {
+          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera.",
+          "enableCodeScanner": true,
+        }
+      ]
+    ]
   }
 }
