@@ -1,11 +1,11 @@
-import { StackScreenProps } from "@react-navigation/stack";
-import { useCallback, useEffect } from "react";
-import { FlatList, ListRenderItem, TouchableOpacity, View } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { SessionSummary, useSessions } from "../../hooks/useSessions";
-import { Item } from "./Item";
-import { Text } from "@/Components/Text";
-import { useTheme } from "@react-navigation/native";
+import { StackScreenProps } from '@react-navigation/stack';
+import { useCallback, useEffect } from 'react';
+import { FlatList, ListRenderItem, TouchableOpacity, View } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
+import { SessionSummary, useSessions } from '../../hooks/useSessions';
+import { Item } from './Item';
+import { Text } from '@/components/Text';
+import { useTheme } from '@react-navigation/native';
 
 const keyExtractor = (item: SessionSummary) => item.id.toString();
 
@@ -17,7 +17,7 @@ export function SessionsScreen({ navigation }: StackScreenProps<any>) {
       headerRight: () => (
         <TouchableOpacity
           style={{ marginRight: 10 }}
-          onPress={() => navigation.navigate("CreateSessionScreen")}
+          onPress={() => navigation.navigate('CreateSessionScreen')}
         >
           <AntDesign name="pluscircle" size={32} color={theme.colors.primary} />
         </TouchableOpacity>
@@ -46,7 +46,7 @@ export function SessionsScreen({ navigation }: StackScreenProps<any>) {
 function ItemSeparator() {
   return (
     <View
-      style={{ height: 1, backgroundColor: "gray", marginHorizontal: 20 }}
+      style={{ height: 1, backgroundColor: 'gray', marginHorizontal: 20 }}
     />
   );
 }
@@ -56,16 +56,16 @@ function ListHeader() {
     <>
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
           padding: 20,
         }}
       >
         <View>
-          <Text style={{ fontWeight: "600" }}>Nombre</Text>
+          <Text style={{ fontWeight: '600' }}>Nombre</Text>
         </View>
         <View>
-          <Text style={{ fontWeight: "600" }}>Estatus</Text>
+          <Text style={{ fontWeight: '600' }}>Estatus</Text>
         </View>
       </View>
 

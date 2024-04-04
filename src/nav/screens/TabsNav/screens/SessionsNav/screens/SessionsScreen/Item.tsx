@@ -1,10 +1,10 @@
-import { TouchableOpacity, View } from "react-native";
-import { SessionSummary } from "../../hooks/useSessions";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { Text } from "@/Components/Text";
+import { TouchableOpacity, View } from 'react-native';
+import { SessionSummary } from '../../hooks/useSessions';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { Text } from '@/components/Text';
 
-const statuses = ["Editable", "Activa", "Finalizada"];
+const statuses = ['Editable', 'Activa', 'Finalizada'];
 
 export function Item({ item }: { item: SessionSummary }) {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -12,7 +12,7 @@ export function Item({ item }: { item: SessionSummary }) {
   return (
     <TouchableOpacity
       onPress={() => {
-        navigation.navigate("EditSessionScreen", { id: item.id });
+        navigation.navigate('EditSessionScreen', { id: item.id });
       }}
     >
       <View
@@ -22,8 +22,8 @@ export function Item({ item }: { item: SessionSummary }) {
       >
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}
         >
           <Text>{item.name}</Text>

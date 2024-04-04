@@ -1,4 +1,4 @@
-import { Text } from "@/Components/Text";
+import { Text } from "@/components/Text";
 import { View } from "react-native";
 
 export type ItemType = {
@@ -71,7 +71,7 @@ export function Item({ item, index }: ItemProps) {
             justifyContent: "center",
             alignItems: "center",
             padding: 10,
-            gap: 5
+            gap: 5,
           }}
         >
           <Text

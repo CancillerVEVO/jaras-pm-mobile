@@ -2,7 +2,7 @@ import { TouchableOpacity, View } from "react-native";
 import { ProductSummary } from "../../hooks/useProducts";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Text } from "@/Components/Text";
+import { Text } from "@/components/Text";
 
 export function Item({ item }: { item: ProductSummary }) {
   const navigation = useNavigation<StackNavigationProp<any>>();

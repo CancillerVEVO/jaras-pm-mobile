@@ -1,10 +1,13 @@
 import { ScrollView, View } from "react-native";
-import { Input } from "@/Components/Input";
+import { Input } from "@/components/Input";
 import { useForm, Controller } from "react-hook-form";
-import { Button } from "@/Components/Button";
-import { Text } from "@/Components/Text";
+import { Button } from "@/components/Button";
+import { Text } from "@/components/Text";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CreateProductSchema, useCreateProduct } from "../hooks/useCreateProduct";
+import {
+  CreateProductSchema,
+  useCreateProduct,
+} from "../hooks/useCreateProduct";
 
 export function CreateProductScreen() {
   const mutation = useCreateProduct();

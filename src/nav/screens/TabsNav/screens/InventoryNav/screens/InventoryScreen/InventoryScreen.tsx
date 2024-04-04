@@ -4,7 +4,7 @@ import { FlatList, ListRenderItem, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { ProductSummary, useProducts } from "../../hooks/useProducts";
 import { Item } from "./Item";
-import { Text } from "@/Components/Text";
+import { Text } from "@/components/Text";
 import { useTheme } from "@react-navigation/native";
 
 const keyExtractor = (item: ProductSummary) => item.id.toString();

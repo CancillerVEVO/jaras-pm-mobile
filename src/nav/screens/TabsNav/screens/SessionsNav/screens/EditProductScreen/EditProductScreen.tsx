@@ -1,9 +1,9 @@
-import { StackScreenProps } from "@react-navigation/stack";
-import { useCallback, useEffect } from "react";
-import { ProductDetail, useProduct } from "../../hooks/useProduct";
-import { FlatList, ListRenderItem, View } from "react-native";
-import { Item } from "./Item";
-import { Text } from "@/Components/Text";
+import { StackScreenProps } from '@react-navigation/stack';
+import { useCallback, useEffect } from 'react';
+import { ProductDetail, useProduct } from '../../hooks/useProduct';
+import { FlatList, ListRenderItem, View } from 'react-native';
+import { Item } from './Item';
+import { Text } from '@/components/Text';
 
 const keyExtractor = (item: ProductDetail) =>
   item.selling_session_product_id.toString();
@@ -39,21 +39,21 @@ export function EditProductScreen({
         <View>
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
               paddingHorizontal: 20,
               paddingVertical: 10,
             }}
           >
             <Text
               style={{
-                fontWeight: "bold",
+                fontWeight: 'bold',
               }}
             >
               ID
             </Text>
-            <Text style={{ fontWeight: "bold" }}>Vendido</Text>
-            <Text style={{ fontWeight: "bold" }}>Eliminar</Text>
+            <Text style={{ fontWeight: 'bold' }}>Vendido</Text>
+            <Text style={{ fontWeight: 'bold' }}>Eliminar</Text>
           </View>
 
           <ItemSeparator />
@@ -68,7 +68,7 @@ export function EditProductScreen({
             padding: 20,
           }}
         >
-          <Text style={{ color: "gray" }}>No hay productos</Text>
+          <Text style={{ color: 'gray' }}>No hay productos</Text>
         </View>
       }
       ItemSeparatorComponent={ItemSeparator}
@@ -81,7 +81,7 @@ function ItemSeparator() {
     <View
       style={{
         height: 1,
-        backgroundColor: "gray",
+        backgroundColor: 'gray',
         marginHorizontal: 20,
       }}
     />

@@ -1,19 +1,19 @@
-import { Text } from "@/Components/Text";
-import { useTheme } from "@react-navigation/native";
-import { Controller, UseFieldArrayProps, useFieldArray } from "react-hook-form";
-import { TouchableOpacity, View } from "react-native";
+import { Text } from '@/components/Text';
+import { useTheme } from '@react-navigation/native';
+import { Controller, UseFieldArrayProps, useFieldArray } from 'react-hook-form';
+import { TouchableOpacity, View } from 'react-native';
 import {
   CreateProductSchema,
   CreateSessionSchema,
-} from "../../hooks/useCreateSession";
-import { AntDesign } from "@expo/vector-icons";
-import { useCallback, useMemo, useState } from "react";
-import { AddData, AddProductModal } from "../../components/AddProductModal";
+} from '../../hooks/useCreateSession';
+import { AntDesign } from '@expo/vector-icons';
+import { useCallback, useMemo, useState } from 'react';
+import { AddData, AddProductModal } from '../../components/AddProductModal';
 
 export function Products({
   controllerProps,
 }: {
-  controllerProps: UseFieldArrayProps<CreateSessionSchema, "products">;
+  controllerProps: UseFieldArrayProps<CreateSessionSchema, 'products'>;
 }) {
   const { fields, append, remove } = useFieldArray(controllerProps);
   const theme = useTheme();
@@ -36,7 +36,7 @@ export function Products({
 
       setIsVisible(false);
     },
-    [append],
+    [append]
   );
 
   const total = useMemo(() => {
@@ -58,13 +58,13 @@ export function Products({
       >
         <View
           style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
           }}
         >
           <Text
             style={{
-              fontWeight: "600",
+              fontWeight: '600',
             }}
           >
             Productos
@@ -79,7 +79,7 @@ export function Products({
 
         <View>
           {!fields.length ? (
-            <Text style={{ color: "gray" }}>No se han agregado productos</Text>
+            <Text style={{ color: 'gray' }}>No se han agregado productos</Text>
           ) : null}
 
           {fields.map((field, index) => {
@@ -95,8 +95,8 @@ export function Products({
                     <View>
                       <View
                         style={{
-                          flexDirection: "row",
-                          alignItems: "center",
+                          flexDirection: 'row',
+                          alignItems: 'center',
                           gap: 20,
                         }}
                       >
@@ -107,7 +107,7 @@ export function Products({
                         <TouchableOpacity
                           style={{
                             flex: 1,
-                            flexDirection: "row",
+                            flexDirection: 'row',
                             paddingVertical: 20,
                             gap: 20,
                           }}
@@ -130,7 +130,7 @@ export function Products({
                       <View
                         style={{
                           height: 1,
-                          backgroundColor: "gray",
+                          backgroundColor: 'gray',
                         }}
                       />
                     </View>
@@ -143,21 +143,21 @@ export function Products({
           {fields.length ? (
             <View
               style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
+                flexDirection: 'row',
+                justifyContent: 'space-between',
                 paddingVertical: 20,
               }}
             >
               <Text
                 style={{
-                  fontWeight: "600",
+                  fontWeight: '600',
                 }}
               >
                 Total
               </Text>
               <Text
                 style={{
-                  fontWeight: "600",
+                  fontWeight: '600',
                 }}
               >
                 $ {total}

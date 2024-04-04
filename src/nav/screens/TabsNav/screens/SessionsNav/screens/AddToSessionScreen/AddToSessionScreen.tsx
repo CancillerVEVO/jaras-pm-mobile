@@ -1,12 +1,12 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { ListRenderItem, View, Pressable, FlatList } from "react-native";
-import { Text } from "@/Components/Text";
+import { Text } from "@/components/Text";
 import {
   useAvailableProducts,
   ProductSummary,
 } from "../../hooks/useAvailableProducts";
 import { useState } from "react";
-import { Input } from "@/Components/Input";
+import { Input } from "@/components/Input";
 import { useTheme } from "@react-navigation/native";
 import {
   AddToSessionSchema,
@@ -15,7 +15,7 @@ import {
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/Components/Button";
+import { Button } from "@/components/Button";
 
 const keyExtractor = (item: ProductSummary) => item.id.toString();
 
@@ -43,7 +43,7 @@ export function AddToSessionScreen({
 
   const [quantity, setQuantity] = useState("1");
   const [selectedProduct, setSelectedProduct] = useState<ProductSummary | null>(
-    null
+    null,
   );
 
   const renderItem: ListRenderItem<ProductSummary> = ({ item }) => {
@@ -93,28 +93,24 @@ export function AddToSessionScreen({
           padding: 20,
         }}
       >
-        
         <Button
-            onPress={handleSubmit((data) => {
-                mutation.mutate({
-                    selling_session_id: data.selling_session_id,
-                    products: [
-                        {
-                            product_id: selectedProduct!.id,
-                            name: selectedProduct!.name,
-                            price: selectedProduct!.price,
-                            quantity: parseInt(quantity, 10),
-                        },
-                    ],
-                
-                });
-            }
-            )}
-            disabled={mutation.isPending}
+          onPress={handleSubmit((data) => {
+            mutation.mutate({
+              selling_session_id: data.selling_session_id,
+              products: [
+                {
+                  product_id: selectedProduct!.id,
+                  name: selectedProduct!.name,
+                  price: selectedProduct!.price,
+                  quantity: parseInt(quantity, 10),
+                },
+              ],
+            });
+          })}
+          disabled={mutation.isPending}
         >
-            Agregar producto
+          Agregar producto
         </Button>
-
 
         {mutation.error ? (
           <Text style={{ color: "red" }}>{mutation.error.message}</Text>

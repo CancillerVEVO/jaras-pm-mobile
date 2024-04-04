@@ -1,4 +1,4 @@
-import { Text } from "@/Components/Text";
+import { Text } from "@/components/Text";
 import {
   FlatList,
   ListRenderItem,
@@ -13,7 +13,7 @@ import {
 } from "../hooks/useAvailableProducts";
 import { useCallback, useEffect, useState } from "react";
 import { useTheme } from "@react-navigation/native";
-import { Input } from "@/Components/Input";
+import { Input } from "@/components/Input";
 
 const keyExtractor = (item: ProductSummary) => item.id.toString();
 

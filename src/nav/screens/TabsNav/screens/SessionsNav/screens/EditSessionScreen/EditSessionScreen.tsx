@@ -1,10 +1,10 @@
-import { Text } from "@/Components/Text";
-import { StackScreenProps } from "@react-navigation/stack";
-import React, { useEffect } from "react";
-import { ScrollView, View } from "react-native";
-import { useEditSession } from "../../hooks/useEditSession";
-import { useSession } from "../../hooks/useSession";
-import { Products } from "./Products";
+import { Text } from '@/components/Text';
+import { StackScreenProps } from '@react-navigation/stack';
+import React, { useEffect } from 'react';
+import { ScrollView, View } from 'react-native';
+import { useEditSession } from '../../hooks/useEditSession';
+import { useSession } from '../../hooks/useSession';
+import { Products } from './Products';
 
 export function EditSessionScreen({
   route,
@@ -19,7 +19,7 @@ export function EditSessionScreen({
 
   useEffect(() => {
     navigation.setOptions({
-      title: data?.name ?? "",
+      title: data?.name ?? '',
     });
   }, [navigation, data?.name]);
 
@@ -28,8 +28,8 @@ export function EditSessionScreen({
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
         <Text>Cargando...</Text>
@@ -42,11 +42,11 @@ export function EditSessionScreen({
       <View
         style={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <Text style={{ color: "gray" }}>Sesión no encontrada</Text>
+        <Text style={{ color: 'gray' }}>Sesión no encontrada</Text>
       </View>
     );
   }

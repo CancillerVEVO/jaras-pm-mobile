@@ -1,7 +1,7 @@
-import { Text } from "@/Components/Text";
-import { View, TextInput, StyleSheet } from "react-native";
-import { useConfig } from "./hooks/useSettings";
-import { Button } from "@/Components/Button";
+import { Text } from '@/components/Text';
+import { View, TextInput, StyleSheet } from 'react-native';
+import { useConfig } from './hooks/useSettings';
+import { Button } from '@/components/Button';
 export function SettingsScreen() {
   const query = useConfig();
   const data = query.data ?? [];
@@ -14,7 +14,7 @@ export function SettingsScreen() {
         <Text style={styles.label}>Sheet URL:</Text>
         <TextInput
           style={styles.input}
-          value={settings?.sheet_url ?? ""}
+          value={settings?.sheet_url ?? ''}
           onChangeText={(text) => {
             // Puedes manejar el cambio aquí si lo necesitas
           }}
@@ -26,9 +26,9 @@ export function SettingsScreen() {
           Esta es la hoja de cálculo donde se guardarán las ventas. Hay 2 puntos
           que tener en cuenta:
         </Text>
-        <Text style={styles.point}>{"\u2022 "} Que la hoja exista.</Text>
+        <Text style={styles.point}>{'\u2022 '} Que la hoja exista.</Text>
         <Text style={styles.point}>
-          {"\u2022 "} Que pueda ser accedida públicamente.
+          {'\u2022 '} Que pueda ser accedida públicamente.
         </Text>
       </View>
       <View style={styles.buttonContainer}>
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   description: {
     marginBottom: 10,
-    textAlign: "center",
+    textAlign: 'center',
   },
   point: {
     marginLeft: 20, // Indentación de la viñeta
@@ -65,9 +65,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   input: {
-    width: "100%",
+    width: '100%',
     borderWidth: 1,
-    borderColor: "black",
+    borderColor: 'black',
     borderRadius: 5,
     padding: 10,
   },
@@ -75,10 +75,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   button: {
-    borderColor: "#007bff", // Color azul para el borde
+    borderColor: '#007bff', // Color azul para el borde
     borderWidth: 1, // Ancho del borde
     borderRadius: 5, // Bordes redondeados
-    backgroundColor: "transparent", // Fondo transparente
-    overflow: "hidden", // Asegurar que el botón no se desborde
+    backgroundColor: 'transparent', // Fondo transparente
+    overflow: 'hidden', // Asegurar que el botón no se desborde
   },
 });

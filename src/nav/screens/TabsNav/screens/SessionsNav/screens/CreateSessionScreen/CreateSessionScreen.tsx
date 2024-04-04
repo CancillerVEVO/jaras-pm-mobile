@@ -1,22 +1,22 @@
-import { ScrollView, View } from "react-native";
-import { Input } from "@/Components/Input";
-import { useForm, Controller } from "react-hook-form";
-import { Button } from "@/Components/Button";
-import { Text } from "@/Components/Text";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { ScrollView, View } from 'react-native';
+import { Input } from '@/components/Input';
+import { useForm, Controller } from 'react-hook-form';
+import { Button } from '@/components/Button';
+import { Text } from '@/components/Text';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   CreateSessionSchema,
   useCreateSession,
-} from "../../hooks/useCreateSession";
-import { z } from "zod";
-import { Products } from "./Products";
+} from '../../hooks/useCreateSession';
+import { z } from 'zod';
+import { Products } from './Products';
 
 export function CreateSessionScreen() {
   const mutation = useCreateSession();
 
   const form = useForm<z.input<typeof CreateSessionSchema>>({
     defaultValues: {
-      name: "",
+      name: '',
       session_status_id: 1,
       products: [],
     },
@@ -51,7 +51,7 @@ export function CreateSessionScreen() {
               editable={!mutation.isPending}
             />
 
-            {error && <Text style={{ color: "red" }}>{error.message}</Text>}
+            {error && <Text style={{ color: 'red' }}>{error.message}</Text>}
           </View>
         )}
         name="name"
@@ -60,12 +60,12 @@ export function CreateSessionScreen() {
       <Products
         controllerProps={{
           control,
-          name: "products",
+          name: 'products',
         }}
       />
 
       {mutation.isError && (
-        <Text style={{ color: "red" }}>{mutation.error.message}</Text>
+        <Text style={{ color: 'red' }}>{mutation.error.message}</Text>
       )}
 
       <Button

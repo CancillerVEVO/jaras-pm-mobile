@@ -1,7 +1,7 @@
-import { View } from "react-native";
-import { ProductDetail } from "../../hooks/useProduct";
-import { Text } from "@/Components/Text";
-import { useDeleteProduct } from "../../hooks/useDeleteProduct";
+import { View } from 'react-native';
+import { ProductDetail } from '../../hooks/useProduct';
+import { Text } from '@/components/Text';
+import { useDeleteProduct } from '../../hooks/useDeleteProduct';
 
 export function Item({ item }: { item: ProductDetail }) {
   const mutation = useDeleteProduct({
@@ -13,14 +13,14 @@ export function Item({ item }: { item: ProductDetail }) {
   return (
     <View
       style={{
-        flexDirection: "row",
-        justifyContent: "space-between",
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         paddingHorizontal: 20,
         paddingVertical: 10,
       }}
     >
       <Text>{item.selling_session_product_id}</Text>
-      <Text>{item.is_sold ? "✅" : "❌"}</Text>
+      <Text>{item.is_sold ? '✅' : '❌'}</Text>
       {!item.is_sold ? (
         <Text onPress={() => mutation.mutate()}>🗑️</Text>
       ) : (

@@ -1,11 +1,11 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { useProduct } from "../hooks/useProduct";
 import { ScrollView, View } from "react-native";
-import { Input } from "@/Components/Input";
+import { Input } from "@/components/Input";
 import { useForm, Controller } from "react-hook-form";
 import { useEffect } from "react";
-import { Button } from "@/Components/Button";
-import { Text } from "@/Components/Text";
+import { Button } from "@/components/Button";
+import { Text } from "@/components/Text";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EditProductSchema, useEditProduct } from "../hooks/useEditProduct";
 

@@ -1,14 +1,14 @@
-import { Text } from "@/Components/Text";
+import { Text } from '@/components/Text';
 import {
   useNavigation,
   useTheme,
   useRoute,
   RouteProp,
-} from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { useMemo } from "react";
-import { TouchableOpacity, View } from "react-native";
-import { ProductSummary } from "../../hooks/useSession";
+} from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { useMemo } from 'react';
+import { TouchableOpacity, View } from 'react-native';
+import { ProductSummary } from '../../hooks/useSession';
 
 export function Products({ products }: { products: ProductSummary[] }) {
   const navigation = useNavigation<StackNavigationProp<any>>();
@@ -19,7 +19,7 @@ export function Products({ products }: { products: ProductSummary[] }) {
   const theme = useTheme();
 
   const onPressEdit = (product: ProductSummary) => {
-    navigation.navigate("EditProductScreen", {
+    navigation.navigate('EditProductScreen', {
       id: product.product_id,
       name: product.name,
       selling_session_id,
@@ -27,9 +27,9 @@ export function Products({ products }: { products: ProductSummary[] }) {
   };
 
   const onPressAdd = () => {
-    navigation.navigate("AddToSessionScreen", {
+    navigation.navigate('AddToSessionScreen', {
       selling_session_id,
-      exclude
+      exclude,
     });
   };
 
@@ -51,13 +51,13 @@ export function Products({ products }: { products: ProductSummary[] }) {
     >
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
+          flexDirection: 'row',
+          justifyContent: 'space-between',
         }}
       >
         <Text
           style={{
-            fontWeight: "600",
+            fontWeight: '600',
           }}
         >
           Productos
@@ -70,7 +70,7 @@ export function Products({ products }: { products: ProductSummary[] }) {
 
       <View>
         {!products.length ? (
-          <Text style={{ color: "gray" }}>No se han agregado productos</Text>
+          <Text style={{ color: 'gray' }}>No se han agregado productos</Text>
         ) : null}
 
         {products.map((product) => {
@@ -78,15 +78,15 @@ export function Products({ products }: { products: ProductSummary[] }) {
             <View key={product.product_id}>
               <View
                 style={{
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                   gap: 20,
                 }}
               >
                 <TouchableOpacity
                   style={{
                     flex: 1,
-                    flexDirection: "row",
+                    flexDirection: 'row',
                     paddingVertical: 20,
                     gap: 20,
                   }}
@@ -109,7 +109,7 @@ export function Products({ products }: { products: ProductSummary[] }) {
               <View
                 style={{
                   height: 1,
-                  backgroundColor: "gray",
+                  backgroundColor: 'gray',
                 }}
               />
             </View>
@@ -119,21 +119,21 @@ export function Products({ products }: { products: ProductSummary[] }) {
         {products.length ? (
           <View
             style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
+              flexDirection: 'row',
+              justifyContent: 'space-between',
               paddingVertical: 20,
             }}
           >
             <Text
               style={{
-                fontWeight: "600",
+                fontWeight: '600',
               }}
             >
               Total
             </Text>
             <Text
               style={{
-                fontWeight: "600",
+                fontWeight: '600',
               }}
             >
               $ {total}
