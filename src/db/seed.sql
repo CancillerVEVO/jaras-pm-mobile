@@ -7,28 +7,13 @@ CREATE TABLE IF NOT EXISTS Products (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO Products (id, price, name) VALUES (1, 100, 'Naranjas');
-INSERT INTO Products (id, price, name) VALUES (2, 200, 'Manzanas');
-INSERT INTO Products (id, price, name) VALUES (3, 100, 'Peras');
-INSERT INTO Products (id, price, name) VALUES (4, 200, 'Uvas');
-INSERT INTO Products (id, price, name) VALUES (5, 100, 'Mangos');
-INSERT INTO Products (id, price, name) VALUES (6, 200, 'Papayas');
-INSERT INTO Products (id, price, name) VALUES (7, 100, 'Fresas');
-INSERT INTO Products (id, price, name) VALUES (8, 200, 'Sandias');
-INSERT INTO Products (id, price, name) VALUES (9, 100, 'Melones');
-INSERT INTO Products (id, price, name) VALUES (10, 200, 'Platanos');
-
-
-/* Tabla de estatus de la sesion */ 
+/* Tabla de estatus de la sesion */
 DROP TABLE IF EXISTS Session_Status;
 CREATE TABLE IF NOT EXISTS Session_Status (
     id INTEGER PRIMARY KEY,
     description TEXT
 );
 
--- Insertar estados de sesión
-INSERT INTO Session_Status (id, description) VALUES (1, 'Activa');
-INSERT INTO Session_Status (id, description) VALUES (2, 'Cerrada');
 
 /* Tabla de sesiones de venta */
 DROP TABLE IF EXISTS Selling_Session;
@@ -40,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Selling_Session (
     FOREIGN KEY (session_status_id) REFERENCES Session_Status(id)
 );
 
-INSERT INTO Selling_Session (id, name, session_status_id) VALUES (1, 'Sesión 1', 1);
+
 
 /* Tabla de productos en sesion de venta */
 DROP TABLE IF EXISTS Selling_Session_Products;
@@ -52,13 +37,6 @@ CREATE TABLE IF NOT EXISTS Selling_Session_Products (
     FOREIGN KEY (selling_session_id) REFERENCES Selling_Session(id),
     FOREIGN KEY (product_id) REFERENCES Products(id)
 );
-
-
-INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
-INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
-INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
-INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 2);
-INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 2);
 
 /* Tabla de ventas */
 DROP TABLE IF EXISTS Session_Product_Sales;
@@ -73,11 +51,6 @@ CREATE TABLE IF NOT EXISTS Session_Product_Sales (
     FOREIGN KEY (selling_session_product_id) REFERENCES Selling_Session_Products(id)
 );
 
-/* Insertar ventas */
-INSERT INTO Session_Product_Sales (selling_session_id, selling_session_product_id, product_name, sale_price) VALUES (1, 1, 'Naranjas', 100);
-INSERT INTO Session_Product_Sales (selling_session_id, selling_session_product_id, product_name, sale_price) VALUES (1, 2, 'Naranjas', 100);
-INSERT INTO Session_Product_Sales (selling_session_id, selling_session_product_id, product_name, sale_price) VALUES (1, 4, 'Manzana', 200);
-
 
 /* Tabla de tipos de eventos */
 DROP TABLE IF EXISTS Event_Type;
@@ -89,9 +62,8 @@ CREATE TABLE IF NOT EXISTS Event_Type (
 
 -- Insertar tipos de eventos
 INSERT INTO Event_Type (id, name, color) VALUES (1, 'Sesión creada', '#4CAF50');
-INSERT INTO Event_Type (id, name, color) VALUES (2, 'Sesión activada', '#2196F3');
-INSERT INTO Event_Type (id, name, color) VALUES (3, 'Sesión cerrada', '#D32F2F');
-INSERT INTO Event_Type (id, name, color) VALUES (4, 'Producto vendido', '#ED733C');
+INSERT INTO Event_Type (id, name, color) VALUES (2, 'Sesión cerrada', '#D32F2F');
+INSERT INTO Event_Type (id, name, color) VALUES (3, 'Producto vendido', '#ED733C');
 
 
 /* Tabla de eventos */
@@ -104,14 +76,66 @@ CREATE TABLE IF NOT EXISTS Events (
     FOREIGN KEY (event_type_id) REFERENCES Event_Type(id)
 );
 
--- Insertar eventos
-INSERT INTO Events (event_type_id, description) VALUES (1, 'Se ha creado una nueva sesión de venta "Sesión 1"');
-    
-/* Tabla de Configuracion Sheets */
-DROP TABLE IF EXISTS Sheets_Config;
-CREATE TABLE IF NOT EXISTS Sheets_Config (
-    id INTEGER PRIMARY KEY,
-    sheet_url TEXT
-);
 
-INSERT INTO Sheets_Config (id, sheet_url) VALUES (1, 'https://docs.google.com/spreadsheets/d/1J');
+-- Triggers para insertar eventos
+
+-- Trigger para insertar evento después de que se haya creado una sesión
+DROP TRIGGER IF EXISTS insert_event_after_selling_session;
+CREATE TRIGGER insert_event_after_selling_session
+AFTER INSERT ON Selling_Session
+BEGIN
+    INSERT INTO Events (event_type_id, description, created_at)
+    VALUES (1, 'Se ha creado una nueva sesión de venta "' || NEW.name || '".', datetime('now'));
+END;
+
+-- Trigger para insertar evento después de que se haya finalizado una sesión
+DROP TRIGGER IF EXISTS update_event_after_selling_session;
+CREATE TRIGGER update_event_after_selling_session
+AFTER UPDATE OF session_status_id ON Selling_Session
+WHEN NEW.session_status_id = 2 -- Asegúrate de que este valor coincide con el estado de sesión finalizada
+BEGIN
+    INSERT INTO Events (event_type_id, description, created_at)
+    VALUES (2, 'Se ha finalizado la sesión de venta "' || NEW.name || '".', datetime('now'));
+END;
+
+-- Trigger para insertar evento después de que se haya vendido un producto
+DROP TRIGGER IF EXISTS insert_event_after_product_sold;
+CREATE TRIGGER insert_event_after_product_sold
+AFTER INSERT ON Session_Product_Sales
+BEGIN
+   INSERT INTO Events (event_type_id, description, created_at)
+    VALUES (3, 'Se ha vendido el producto "' || NEW.product_name || '". Precio: $'|| NEW.sale_price ||'.', datetime('now'));
+END;
+
+
+
+-- Inserts de PRODUCTOS
+INSERT INTO Products (id, price, name) VALUES (1, 100, 'Naranjas');
+INSERT INTO Products (id, price, name) VALUES (2, 200, 'Manzanas');
+INSERT INTO Products (id, price, name) VALUES (3, 100, 'Peras');
+INSERT INTO Products (id, price, name) VALUES (4, 200, 'Uvas');
+INSERT INTO Products (id, price, name) VALUES (5, 100, 'Mangos');
+INSERT INTO Products (id, price, name) VALUES (6, 200, 'Papayas');
+INSERT INTO Products (id, price, name) VALUES (7, 100, 'Fresas');
+INSERT INTO Products (id, price, name) VALUES (8, 200, 'Sandias');
+INSERT INTO Products (id, price, name) VALUES (9, 100, 'Melones');
+INSERT INTO Products (id, price, name) VALUES (10, 200, 'Platanos');
+
+-- Inserts de STATUS DE SESION 
+INSERT INTO Session_Status (id, description) VALUES (1, 'Activa');
+INSERT INTO Session_Status (id, description) VALUES (2, 'Cerrada');
+
+-- Inserts de SESIONES DE VENTA
+INSERT INTO Selling_Session (id, name, session_status_id) VALUES (1, 'Sesión 1', 1);
+
+-- Inserts de PRODUCTOS A SESION DE VENTA
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 2);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 2);
+
+-- Inserts de VENTAS
+INSERT INTO Session_Product_Sales (selling_session_id, selling_session_product_id, product_name, sale_price) VALUES (1, 1, 'Naranjas', 100);
+INSERT INTO Session_Product_Sales (selling_session_id, selling_session_product_id, product_name, sale_price) VALUES (1, 2, 'Naranjas', 100);
+INSERT INTO Session_Product_Sales (selling_session_id, selling_session_product_id, product_name, sale_price) VALUES (1, 4, 'Manzana', 200);
