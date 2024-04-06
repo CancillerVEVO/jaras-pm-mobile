@@ -4,6 +4,7 @@ import { CreateSessionScreen } from "./screens/CreateSessionScreen";
 import { EditSessionScreen } from "./screens/EditSessionScreen";
 import { EditProductScreen } from "./screens/EditProductScreen";
 import { AddToSessionScreen } from "./screens/AddToSessionScreen";
+import { ReceiptScreen } from "./screens/ReceiptScreen";
 
 const Stack = createStackNavigator();
 const Navigator = Stack.Navigator;
@@ -45,6 +46,13 @@ export function SessionsNav() {
         component={AddToSessionScreen}
         options={{
           title: "Añadir a sesión",
+        }}
+      />
+      <Screen
+        name="ReceiptScreen"
+        component={ReceiptScreen}
+        options={{
+          title: "Recibo",
         }}
       />
     </Navigator>

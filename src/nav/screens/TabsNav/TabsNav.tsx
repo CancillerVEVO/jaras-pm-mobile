@@ -1,11 +1,9 @@
-import { Entypo, FontAwesome5 } from "@expo/vector-icons";
+import { Entypo, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { EventsScreen } from "./screens/EventsScreen";
 import { InventoryNav } from "./screens/InventoryNav/InventoryNav";
-import { SettingsScreen } from "./screens/SettingsScreen";
-import { SessionsNav } from "./screens/SessionsNav/SessionsNav";
 import { ScannerScreen } from "./screens/ScannerScreen";
-import { MaterialIcons } from "@expo/vector-icons";
+import { SessionsNav } from "./screens/SessionsNav/SessionsNav";
 
 const Tabs = createBottomTabNavigator();
 const Navigator = Tabs.Navigator;
@@ -59,17 +57,6 @@ export function TabsNav() {
           ),
         }}
         component={EventsScreen}
-      />
-      <Screen
-        name="SettingsScreen"
-        options={{
-          headerShown: true,
-          title: "Configuración",
-          tabBarIcon: ({ color, size }) => (
-            <Entypo name="cog" size={size} color={color} />
-          ),
-        }}
-        component={SettingsScreen}
       />
     </Navigator>
   );

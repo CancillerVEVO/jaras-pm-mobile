@@ -1,9 +1,12 @@
-import { StackScreenProps } from '@react-navigation/stack';
-import { useCallback, useEffect } from 'react';
-import { ProductDetail, useProduct } from '../../hooks/useProduct';
-import { FlatList, ListRenderItem, View } from 'react-native';
-import { Item } from './Item';
-import { Text } from '@/components/Text';
+import { StackScreenProps } from "@react-navigation/stack";
+import { useCallback, useEffect, useState } from "react";
+import { ProductDetail, useProduct } from "../../hooks/useProduct";
+import { FlatList, ListRenderItem, View } from "react-native";
+import { Item } from "./Item";
+import { Text } from "@/components/Text";
+import { Input } from "@/components/Input";
+import { Button } from "@/components/Button";
+import { useAddToSession } from "../../hooks/useAddToSession";
 
 const keyExtractor = (item: ProductDetail) =>
   item.selling_session_product_id.toString();
@@ -35,44 +38,100 @@ export function EditProductScreen({
 
   return (
     <FlatList
-      ListHeaderComponent={
-        <View>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              paddingHorizontal: 20,
-              paddingVertical: 10,
-            }}
-          >
-            <Text
-              style={{
-                fontWeight: 'bold',
-              }}
-            >
-              ID
-            </Text>
-            <Text style={{ fontWeight: 'bold' }}>Vendido</Text>
-            <Text style={{ fontWeight: 'bold' }}>Eliminar</Text>
-          </View>
-
-          <ItemSeparator />
-        </View>
-      }
+      ListHeaderComponent={<ListHeader params={route.params} />}
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       data={data}
-      ListEmptyComponent={
-        <View
-          style={{
-            padding: 20,
-          }}
-        >
-          <Text style={{ color: 'gray' }}>No hay productos</Text>
-        </View>
-      }
+      ListEmptyComponent={ListEmpty}
       ItemSeparatorComponent={ItemSeparator}
     />
+  );
+}
+
+function ListEmpty() {
+  return (
+    <View
+      style={{
+        padding: 20,
+      }}
+    >
+      <Text style={{ color: "gray" }}>No hay productos</Text>
+    </View>
+  );
+}
+
+function ListHeader({ params }: { params: any }) {
+  const selling_session_id = params?.selling_session_id as number;
+  const id = params?.id as number;
+  const name = params?.name as string;
+
+  const mutation = useAddToSession();
+  const [quantity, setQuantity] = useState("1");
+
+  return (
+    <View>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 20,
+          padding: 20,
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          <Input
+            label="Cantidad"
+            placeholder="Cantidad a agregar"
+            keyboardType="numeric"
+            returnKeyType="done"
+            value={quantity}
+            onChangeText={setQuantity}
+          />
+        </View>
+        <Button
+          onPress={() => {
+            const q = parseInt(quantity);
+
+            if (Number.isNaN(q) || q <= 0) {
+              return;
+            }
+
+            mutation.mutate({
+              selling_session_id,
+              products: [
+                {
+                  product_id: id,
+                  quantity: q,
+                },
+              ],
+            });
+          }}
+        >
+          Agregar
+        </Button>
+      </View>
+
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingHorizontal: 20,
+          paddingVertical: 10,
+        }}
+      >
+        <Text
+          style={{
+            fontWeight: "bold",
+          }}
+        >
+          ID
+        </Text>
+        <Text style={{ fontWeight: "bold" }}>Vendido</Text>
+        <Text style={{ fontWeight: "bold" }}>Eliminar</Text>
+      </View>
+
+      <ItemSeparator />
+    </View>
   );
 }
 
@@ -81,7 +140,7 @@ function ItemSeparator() {
     <View
       style={{
         height: 1,
-        backgroundColor: 'gray',
+        backgroundColor: "gray",
         marginHorizontal: 20,
       }}
     />

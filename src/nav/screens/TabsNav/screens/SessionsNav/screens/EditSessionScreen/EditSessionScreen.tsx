@@ -1,11 +1,12 @@
 import { Text } from "@/components/Text";
 import { StackScreenProps } from "@react-navigation/stack";
-import React, { useEffect } from "react";
-import { ScrollView, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Modal, Pressable, ScrollView, View, StyleSheet } from "react-native";
 import { useSession } from "../../hooks/useSession";
 import { Products } from "./Products";
 import { useDownloadPdf } from "../../hooks/useDownloadPdf";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export function EditSessionScreen({
   route,
@@ -15,9 +16,11 @@ export function EditSessionScreen({
 
   const query = useSession(id);
 
-  const mutation = useDownloadPdf(id);
+  const downloadPdfMutation = useDownloadPdf(id);
 
   const data = query.data;
+
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     navigation.setOptions({
@@ -25,15 +28,19 @@ export function EditSessionScreen({
       headerRight: () => (
         <TouchableOpacity
           style={{
-            paddingEnd: 10,
+            padding: 10,
           }}
-          onPress={() => mutation.mutate()}
+          onPress={() => setIsVisible(true)}
         >
-          <Text>📑</Text>
+          <MaterialCommunityIcons
+            name="dots-vertical"
+            size={24}
+            color="black"
+          />
         </TouchableOpacity>
       ),
     });
-  }, [navigation, data, mutation.mutate]);
+  }, [navigation, data, downloadPdfMutation.mutate]);
 
   if (query.isLoading) {
     return (
@@ -64,14 +71,66 @@ export function EditSessionScreen({
   }
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        padding: 20,
-        gap: 20,
-      }}
-      keyboardShouldPersistTaps="handled"
-    >
-      <Products products={data.products} />
-    </ScrollView>
+    <>
+      <ScrollView
+        contentContainerStyle={{
+          padding: 20,
+          gap: 20,
+        }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Products products={data.products} />
+      </ScrollView>
+
+      <Modal transparent statusBarTranslucent visible={isVisible}>
+        <Pressable
+          onPress={() => setIsVisible(false)}
+          style={{
+            ...StyleSheet.absoluteFillObject,
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Pressable
+            style={{
+              backgroundColor: "white",
+              width: "90%",
+              borderRadius: 10,
+            }}
+          >
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => {
+                downloadPdfMutation.mutate();
+                setIsVisible(false);
+              }}
+            >
+              <Text>Generar codigos QR</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.option}>
+              <Text>Generar reporte</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.option}
+              onPress={() => {
+                navigation.navigate("ReceiptScreen", {
+                  selling_session_id: id,
+                });
+                setIsVisible(false);
+              }}
+            >
+              <Text>Ver recibo</Text>
+            </TouchableOpacity>
+          </Pressable>
+        </Pressable>
+      </Modal>
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  option: {
+    padding: 20,
+  },
+});

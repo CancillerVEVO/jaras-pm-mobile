@@ -4,7 +4,7 @@ import axios from "axios";
 import { shareAsync } from "expo-sharing";
 import * as Print from "expo-print";
 
-const url = "http://localhost:3000/qr";
+const url = "http://192.168.68.117:3000/qr";
 
 type Product = {
   selling_session_product_id: number;

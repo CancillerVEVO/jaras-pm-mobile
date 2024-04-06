@@ -5,7 +5,7 @@ import {
   useAvailableProducts,
   ProductSummary,
 } from "../../hooks/useAvailableProducts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/Input";
 import { useTheme } from "@react-navigation/native";
 import {
@@ -31,6 +31,12 @@ export function AddToSessionScreen({
 
   const mutation = useAddToSession();
 
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      navigation.goBack();
+    }
+  }, [mutation.isSuccess, navigation.goBack]);
+
   const form = useForm<z.input<typeof AddToSessionSchema>>({
     defaultValues: {
       selling_session_id,
@@ -39,7 +45,7 @@ export function AddToSessionScreen({
     resolver: zodResolver(AddToSessionSchema),
   });
 
-  const { handleSubmit, control } = form;
+  const { handleSubmit } = form;
 
   const [quantity, setQuantity] = useState("1");
   const [selectedProduct, setSelectedProduct] = useState<ProductSummary | null>(
@@ -100,8 +106,6 @@ export function AddToSessionScreen({
               products: [
                 {
                   product_id: selectedProduct!.id,
-                  name: selectedProduct!.name,
-                  price: selectedProduct!.price,
                   quantity: parseInt(quantity, 10),
                 },
               ],
