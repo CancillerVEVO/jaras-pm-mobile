@@ -13,7 +13,7 @@ export default function App() {
       <StatusBar
         style="dark"
         translucent
-        backgroundColor={DefaultTheme.colors.background}
+        backgroundColor={DefaultTheme.colors.card}
       />
       <NavigationContainer theme={DefaultTheme}>
         <RootNav />

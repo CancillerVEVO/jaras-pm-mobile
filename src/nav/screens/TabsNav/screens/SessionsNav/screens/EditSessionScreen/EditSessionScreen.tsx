@@ -1,11 +1,10 @@
 import { Text } from "@/components/Text";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import { Modal, Pressable, ScrollView, View, StyleSheet } from "react-native";
+import { Modal, Pressable, ScrollView, View, StyleSheet, TouchableOpacity } from "react-native";
 import { useSession } from "../../hooks/useSession";
 import { Products } from "./Products";
 import { useDownloadPdf } from "../../hooks/useDownloadPdf";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export function EditSessionScreen({
@@ -27,20 +26,17 @@ export function EditSessionScreen({
       title: data?.name ?? "",
       headerRight: () => (
         <TouchableOpacity
-          style={{
-            padding: 10,
-          }}
           onPress={() => setIsVisible(true)}
         >
           <MaterialCommunityIcons
             name="dots-vertical"
-            size={24}
+            size={32}
             color="black"
           />
         </TouchableOpacity>
       ),
     });
-  }, [navigation, data, downloadPdfMutation.mutate]);
+  }, [navigation, data?.name, downloadPdfMutation.mutate]);
 
   if (query.isLoading) {
     return (
