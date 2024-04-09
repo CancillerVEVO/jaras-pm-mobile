@@ -1,16 +1,19 @@
 import { StackScreenProps } from '@react-navigation/stack';
 import { useCallback, useEffect } from 'react';
-import { FlatList, ListRenderItem, TouchableOpacity, View } from 'react-native';
+import { FlatList, ListRenderItem, TouchableOpacity, View, Button } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { SessionSummary, useSessions } from '../../hooks/useSessions';
 import { Item } from './Item';
 import { Text } from '@/components/Text';
 import { useTheme } from '@react-navigation/native';
+import { useMoneyGeneratedBySessionsReport } from '../../hooks/useMoneyBySessionReport';
+import { convertToCSV, downloadCSV } from '@/utils/csv';
 
 const keyExtractor = (item: SessionSummary) => item.id.toString();
 
 export function SessionsScreen({ navigation }: StackScreenProps<any>) {
   const theme = useTheme();
+
 
   useEffect(() => {
     navigation.setOptions({
@@ -52,8 +55,14 @@ function ItemSeparator() {
 }
 
 function ListHeader() {
+  const moneyBySessionReport = useMoneyGeneratedBySessionsReport().data ?? [];
   return (
     <>
+      <Button title="Generar Reporte" onPress={async () => {
+        const csv = convertToCSV(moneyBySessionReport);
+        await downloadCSV(csv, `dinero_generado_por_sesion.csv`);
+
+      }} />
       <View
         style={{
           flexDirection: 'row',

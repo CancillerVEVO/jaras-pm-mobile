@@ -78,13 +78,6 @@ export function EditSessionScreen({
 
   return (
     <>
-      <Button
-        title="Generar Reporte"
-        onPress={async () => {
-          const csv = convertToCSV(sessionReport);
-          await downloadCSV(csv, `sesion_${id}_reporte.csv`);
-        }}
-      ></Button>
       <ScrollView
         contentContainerStyle={{
           padding: 20,
@@ -121,7 +114,12 @@ export function EditSessionScreen({
             >
               <Text>Generar codigos QR</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.option}>
+            <TouchableOpacity style={styles.option}
+              onPress={async () => {
+                const csv = convertToCSV(sessionReport);
+                await downloadCSV(csv, `sesion_${id}_reporte.csv`);
+              }}
+            >
               <Text>Generar reporte</Text>
             </TouchableOpacity>
             <TouchableOpacity

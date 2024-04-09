@@ -1,11 +1,13 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import { useCallback, useEffect } from "react";
-import { FlatList, ListRenderItem, TouchableOpacity, View } from "react-native";
+import { Button, FlatList, ListRenderItem, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { ProductSummary, useProducts } from "../../hooks/useProducts";
 import { Item } from "./Item";
 import { Text } from "@/components/Text";
 import { useTheme } from "@react-navigation/native";
+import { useProductsReport } from "../../hooks/useProductReport";
+import { convertToCSV, downloadCSV } from "@/utils/csv";
 
 const keyExtractor = (item: ProductSummary) => item.id.toString();
 
@@ -52,8 +54,14 @@ function ItemSeparator() {
 }
 
 function ListHeader() {
+  const productsReport = useProductsReport().data ?? [];
+
   return (
     <>
+    <Button title="Generar Reporte" onPress={async () => {
+      const csv = convertToCSV(productsReport);
+      await downloadCSV(csv, `reporte_productos.csv`);
+    }}></Button>
       <View
         style={{
           flexDirection: "row",
