@@ -1,11 +1,21 @@
 import { Text } from "@/components/Text";
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { useEffect, useState } from "react";
-import { Modal, Pressable, ScrollView, View, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Modal,
+  Pressable,
+  ScrollView,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+} from "react-native";
 import { useSession } from "../../hooks/useSession";
 import { Products } from "./Products";
 import { useDownloadPdf } from "../../hooks/useDownloadPdf";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useSessionProductsReport } from "../../hooks/useSessionProductsReport";
+import { convertToCSV, downloadCSV } from "@/utils/csv";
 
 export function EditSessionScreen({
   route,
@@ -21,13 +31,13 @@ export function EditSessionScreen({
 
   const [isVisible, setIsVisible] = useState(false);
 
+  const sessionReport = useSessionProductsReport(id).data ?? [];
+
   useEffect(() => {
     navigation.setOptions({
       title: data?.name ?? "",
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => setIsVisible(true)}
-        >
+        <TouchableOpacity onPress={() => setIsVisible(true)}>
           <MaterialCommunityIcons
             name="dots-vertical"
             size={32}
@@ -68,6 +78,13 @@ export function EditSessionScreen({
 
   return (
     <>
+      <Button
+        title="Generar Reporte"
+        onPress={async () => {
+          const csv = convertToCSV(sessionReport);
+          await downloadCSV(csv, `sesion_${id}_reporte.csv`);
+        }}
+      ></Button>
       <ScrollView
         contentContainerStyle={{
           padding: 20,

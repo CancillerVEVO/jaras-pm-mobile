@@ -1,7 +1,14 @@
-import { FlatList, ListRenderItem, ScrollView, View } from "react-native";
+import {
+  FlatList,
+  ListRenderItem,
+  ScrollView,
+  View,
+  Button,
+} from "react-native";
 import { ProductSummary, useReceipt } from "../../hooks/useReceipt";
 import { useCallback, useMemo } from "react";
 import { Text } from "@/components/Text";
+import { downloadCSV, convertToCSV } from "@/utils/csv";
 
 const keyExtractor = (item: ProductSummary) =>
   item.selling_session_product_id.toString();
@@ -16,7 +23,7 @@ export function ReceiptScreen({ route }: any) {
       data.reduce((total, item) => {
         return total + item.sale_price;
       }, 0),
-    [data],
+    [data]
   );
 
   const renderItem: ListRenderItem<ProductSummary> = useCallback(({ item }) => {
@@ -44,6 +51,14 @@ export function ReceiptScreen({ route }: any) {
 
   return (
     <>
+      <Button
+        onPress={async () => {
+          const csv = convertToCSV(data);
+          console.log(csv);
+          await downloadCSV(csv, "reporte.csv");
+        }}
+        title="Descargar Reporte"
+      />
       <FlatList
         renderItem={renderItem}
         keyExtractor={keyExtractor}
