@@ -19,10 +19,13 @@ export function EventsScreen({ navigation, route }: StackScreenProps<any>) {
 
   return (
     <>
-      <Button title="Generar Reporte" onPress={async () => {
-        const csv = convertToCSV(eventReport);
-        await downloadCSV(csv, `reporte_eventos.csv`);
-      }}></Button>
+      <Button
+        title="Generar Reporte"
+        onPress={async () => {
+          const csv = convertToCSV(eventReport);
+          await downloadCSV(csv, `reporte_eventos.csv`);
+        }}
+      ></Button>
       <FlatList data={events} renderItem={renderItem} />
     </>
   );
