@@ -76,6 +76,26 @@ CREATE TABLE IF NOT EXISTS Events (
     FOREIGN KEY (event_type_id) REFERENCES Event_Type(id)
 );
 
+/* Tabla de Categorias */
+DROP TABLE IF EXISTS Categories;
+CREATE TABLE IF NOT EXISTS Categories (
+    id INTEGER PRIMARY KEY,
+    name TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+/* Tabla de Productos y Categorias */
+DROP TABLE IF EXISTS Product_Categories;
+CREATE TABLE IF NOT EXISTS Product_Categories (
+    product_id INTEGER,
+    category_id INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES Products(id),
+    FOREIGN KEY (category_id) REFERENCES Categories(id)
+    PRIMARY KEY (product_id, category_id)
+);
+
+
 
 -- Triggers para insertar eventos
 
@@ -107,19 +127,48 @@ BEGIN
     VALUES (3, 'Se ha vendido el producto "' || NEW.product_name || '". Precio: $'|| NEW.sale_price ||'.', datetime('now'));
 END;
 
-
+-- Insertar Categorias
+INSERT INTO Categories (id, name) VALUES (1, 'Frutas');
+INSERT INTO Categories (id, name) VALUES (2, 'Verduras');
+INSERT INTO Categories (id, name) VALUES (3, 'Carnes');
 
 -- Inserts de PRODUCTOS
+
+-- Frutas 
 INSERT INTO Products (id, price, name) VALUES (1, 100, 'Naranjas');
+INSERT INTO Product_Categories (product_id, category_id) VALUES (1, 1);
+
 INSERT INTO Products (id, price, name) VALUES (2, 200, 'Manzanas');
+INSERT INTO Product_Categories (product_id, category_id) VALUES (2, 1);
+
 INSERT INTO Products (id, price, name) VALUES (3, 100, 'Peras');
+INSERT INTO Product_Categories (product_id, category_id) VALUES (3, 1);
+
 INSERT INTO Products (id, price, name) VALUES (4, 200, 'Uvas');
-INSERT INTO Products (id, price, name) VALUES (5, 100, 'Mangos');
-INSERT INTO Products (id, price, name) VALUES (6, 200, 'Papayas');
-INSERT INTO Products (id, price, name) VALUES (7, 100, 'Fresas');
-INSERT INTO Products (id, price, name) VALUES (8, 200, 'Sandias');
-INSERT INTO Products (id, price, name) VALUES (9, 100, 'Melones');
-INSERT INTO Products (id, price, name) VALUES (10, 200, 'Platanos');
+INSERT INTO Product_Categories (product_id, category_id) VALUES (4, 1);
+
+-- Verduras
+
+INSERT INTO Products (id, price, name) VALUES (5, 100, 'Papas');
+INSERT INTO Product_Categories (product_id, category_id) VALUES (5, 2);
+
+INSERT INTO Products (id, price, name) VALUES (6, 200, 'Zanahorias');
+INSERT INTO Product_Categories (product_id, category_id) VALUES (6, 2);
+
+-- Carnes
+
+INSERT INTO Products (id, price, name) VALUES (7, 100, 'Pollo');
+INSERT INTO Product_Categories (product_id, category_id) VALUES (7, 3);
+
+INSERT INTO Products (id, price, name) VALUES (8, 200, 'Res');
+INSERT INTO Product_Categories (product_id, category_id) VALUES (8, 3);
+
+INSERT INTO Products (id, price, name) VALUES (9, 100, 'Cerdo');
+INSERT INTO Product_Categories (product_id, category_id) VALUES (9, 3);
+
+INSERT INTO Products (id, price, name) VALUES (10, 200, 'Pescado');
+INSERT INTO Product_Categories (product_id, category_id) VALUES (10, 3);
+
 
 -- Inserts de STATUS DE SESION 
 INSERT INTO Session_Status (id, description) VALUES (1, 'Activa');
