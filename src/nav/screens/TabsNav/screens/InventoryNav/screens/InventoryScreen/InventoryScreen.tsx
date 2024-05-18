@@ -17,6 +17,7 @@ import { convertToCSV, downloadCSV } from "@/utils/csv";
 import { CategorySummary, useCategories } from "../../hooks/useCategories";
 import { Select, SelectItem } from "@/components/Select";
 
+
 const keyExtractor = (item: ProductSummary) => item.id.toString();
 
 export function InventoryScreen({ navigation }: StackScreenProps<any>) {
