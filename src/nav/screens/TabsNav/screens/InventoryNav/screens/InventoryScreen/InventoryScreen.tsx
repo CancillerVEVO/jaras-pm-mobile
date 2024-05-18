@@ -1,5 +1,5 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   Button,
   FlatList,
@@ -14,6 +14,7 @@ import { Text } from "@/components/Text";
 import { useTheme } from "@react-navigation/native";
 import { useProductsReport } from "../../hooks/useProductReport";
 import { convertToCSV, downloadCSV } from "@/utils/csv";
+import { CategorySummary, useCategories } from "../../hooks/useCategories";
 
 const keyExtractor = (item: ProductSummary) => item.id.toString();
 
@@ -33,8 +34,12 @@ export function InventoryScreen({ navigation }: StackScreenProps<any>) {
     });
   }, [navigation]);
 
-  const query = useProducts();
-  const data = query.data ?? [];
+  const productQuery = useProducts();
+  const data = productQuery.data ?? [];
+
+  const categoryQuery = useCategories();
+
+  const categories = categoryQuery.data ?? [];
 
   const renderItem: ListRenderItem<ProductSummary> = useCallback((props) => {
     return <Item {...props} />;
@@ -59,6 +64,7 @@ function ItemSeparator() {
   );
 }
 
+
 function ListHeader() {
   const productsReport = useProductsReport().data ?? [];
 
@@ -78,6 +84,7 @@ function ListHeader() {
           padding: 20,
         }}
       >
+
         <View>
           <Text style={{ fontWeight: "600" }}>Nombre</Text>
         </View>

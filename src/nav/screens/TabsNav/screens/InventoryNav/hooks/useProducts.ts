@@ -5,13 +5,22 @@ export type ProductSummary = {
   id: number;
   name: string;
   price: number;
+  category: string;
+  createdAt: string;
 };
 
 function getProducts() {
   return new Promise<ProductSummary[]>((resolve, reject) => {
     db().readTransaction((tx) => {
       tx.executeSql(
-        `SELECT * FROM "Products"`,
+        `select P.id,
+       P.name,
+       P.price,
+       C.name as category,
+       P.created_at as createdAt
+from "Products" P
+inner join Product_Categories on P.id = Product_Categories.product_id
+inner join main.Categories C on Product_Categories.category_id = C.id`,
         [],
         (_, { rows }) => {
           const products: ProductSummary[] = [];
