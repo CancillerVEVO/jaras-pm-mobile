@@ -36,7 +36,8 @@ export function SelectItem(props: SelectItemProps) {
 export interface SelectProps {
   value: any;
   onChange: (value: any) => void;
-  children: ReactElement<SelectItemProps>[];
+  // children: ReactElement<SelectItemProps>[];
+  children: any;
   label: string;
   getLabel: (value: any) => string;
 }

@@ -1,5 +1,5 @@
 import { StackScreenProps } from "@react-navigation/stack";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Button,
   FlatList,
@@ -15,6 +15,7 @@ import { useTheme } from "@react-navigation/native";
 import { useProductsReport } from "../../hooks/useProductReport";
 import { convertToCSV, downloadCSV } from "@/utils/csv";
 import { CategorySummary, useCategories } from "../../hooks/useCategories";
+import { Select, SelectItem } from "@/components/Select";
 
 const keyExtractor = (item: ProductSummary) => item.id.toString();
 
@@ -35,7 +36,14 @@ export function InventoryScreen({ navigation }: StackScreenProps<any>) {
   }, [navigation]);
 
   const productQuery = useProducts();
-  const data = productQuery.data ?? [];
+
+  const [category, setCategory] = useState<number | null>(null);
+
+  const data = useMemo(() => {
+    const d = productQuery.data ?? [];
+
+    return category ? d.filter((e) => e.category_id === category) : d;
+  }, [category, productQuery.data]);
 
   const categoryQuery = useCategories();
 
@@ -51,7 +59,9 @@ export function InventoryScreen({ navigation }: StackScreenProps<any>) {
       keyExtractor={keyExtractor}
       renderItem={renderItem}
       ItemSeparatorComponent={ItemSeparator}
-      ListHeaderComponent={ListHeader}
+      ListHeaderComponent={
+        <ListHeader {...{ category, setCategory, categories }} />
+      }
     />
   );
 }
@@ -64,8 +74,15 @@ function ItemSeparator() {
   );
 }
 
-
-function ListHeader() {
+function ListHeader({
+  category,
+  setCategory,
+  categories,
+}: {
+  category: number | null;
+  setCategory: (category: number | null) => void;
+  categories: CategorySummary[];
+}) {
   const productsReport = useProductsReport().data ?? [];
 
   return (
@@ -77,6 +94,28 @@ function ListHeader() {
           await downloadCSV(csv, `reporte_productos.csv`);
         }}
       ></Button>
+
+      <View
+        style={{
+          paddingHorizontal: 20,
+        }}
+      >
+        <Select
+          label="Filtrar por categoria"
+          value={category}
+          getLabel={(id: number) => {
+            const category = categories.find((e) => e.id === id);
+            return category?.name ?? "Todos";
+          }}
+          onChange={setCategory}
+        >
+          <SelectItem value={null} label="Todos" />
+          {categories.map((e) => {
+            return <SelectItem key={e.id} value={e.id} label={e.name} />;
+          })}
+        </Select>
+      </View>
+
       <View
         style={{
           flexDirection: "row",
@@ -84,7 +123,6 @@ function ListHeader() {
           padding: 20,
         }}
       >
-
         <View>
           <Text style={{ fontWeight: "600" }}>Nombre</Text>
         </View>

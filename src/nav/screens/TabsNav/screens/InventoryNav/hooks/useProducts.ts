@@ -6,6 +6,7 @@ export type ProductSummary = {
   name: string;
   price: number;
   category: string;
+  category_id: number;
   createdAt: string;
 };
 
@@ -17,6 +18,7 @@ function getProducts() {
        P.name,
        P.price,
        C.name as category,
+       C.id as category_id,
        P.created_at as createdAt
 from "Products" P
 inner join Product_Categories on P.id = Product_Categories.product_id
@@ -31,7 +33,7 @@ inner join main.Categories C on Product_Categories.category_id = C.id`,
         },
         (tx, err): boolean | any => {
           reject(err);
-        }
+        },
       );
     });
   });
