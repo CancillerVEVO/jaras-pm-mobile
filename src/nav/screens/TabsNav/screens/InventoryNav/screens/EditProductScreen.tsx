@@ -1,4 +1,4 @@
-import { StackScreenProps } from "@react-navigation/stack";
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack";
 import { useProduct } from "../hooks/useProduct";
 import { ScrollView, View } from "react-native";
 import { Input } from "@/components/Input";
@@ -8,10 +8,13 @@ import { Button } from "@/components/Button";
 import { Text } from "@/components/Text";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EditProductSchema, useEditProduct } from "../hooks/useEditProduct";
+import { useNavigation } from "@react-navigation/native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export function EditProductScreen({ route }: StackScreenProps<any>) {
   const query = useProduct(route.params?.id as number);
   const mutation = useEditProduct(route.params?.id as number);
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const data = query.data;
 
@@ -123,6 +126,26 @@ export function EditProductScreen({ route }: StackScreenProps<any>) {
       {mutation.isSuccess && (
         <Text style={{ color: "green" }}>Producto actualizado</Text>
       )}
+
+      <View>
+        <TouchableOpacity
+          onPress={
+            () => {
+              navigation.navigate("ProductCategoryScreen", {id: route.params?.id as number});
+            }
+          }
+        >
+          <Text
+            style={{
+              color: "blue",
+              textDecorationLine: "underline",
+              fontSize: 16,
+            }}
+          >
+            Editar Categorías
+          </Text>
+        </TouchableOpacity>
+      </View>
 
       <Button
         onPress={handleSubmit(onSubmit as any)}

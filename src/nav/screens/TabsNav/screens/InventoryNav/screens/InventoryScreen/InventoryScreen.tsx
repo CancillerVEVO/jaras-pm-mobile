@@ -36,15 +36,17 @@ export function InventoryScreen({ navigation }: StackScreenProps<any>) {
     });
   }, [navigation]);
 
-  const productQuery = useProducts();
+
 
   const [category, setCategory] = useState<number | null>(null);
 
-  const data = useMemo(() => {
-    const d = productQuery.data ?? [];
 
-    return category ? d.filter((e) => e.category_id === category) : d;
-  }, [category, productQuery.data]);
+
+  const productQuery = useProducts(
+    category === null ? undefined : category
+  );
+
+  const data = productQuery.data ?? [];
 
   const categoryQuery = useCategories();
 
