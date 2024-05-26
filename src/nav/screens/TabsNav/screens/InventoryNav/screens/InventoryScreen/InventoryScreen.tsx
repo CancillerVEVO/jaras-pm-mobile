@@ -86,7 +86,9 @@ function ListHeader({
   setCategory: (category: number | null) => void;
   categories: CategorySummary[];
 }) {
-  const productsReport = useProductsReport().data ?? [];
+  const productsReport = useProductsReport(
+    category === null ? undefined : category
+  ).data ?? [];
 
   return (
     <>
