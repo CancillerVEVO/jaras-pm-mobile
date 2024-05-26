@@ -176,6 +176,7 @@ INSERT INTO Session_Status (id, description) VALUES (2, 'Cerrada');
 
 -- Inserts de SESIONES DE VENTA
 INSERT INTO Selling_Session (id, name, session_status_id) VALUES (1, 'Sesión 1', 1);
+INSERT INTO Selling_Session (id, name, session_status_id) VALUES (2, 'Demostración Ventas', 1);
 
 -- Inserts de PRODUCTOS A SESION DE VENTA
 INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
@@ -183,6 +184,14 @@ INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1,
 INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 1);
 INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 2);
 INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (1, 2);
+
+
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (2, 1);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (2, 2);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (2, 3);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (2, 4);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (2, 5);
+INSERT INTO Selling_Session_Products (selling_session_id, product_id) VALUES (2, 6);
 
 -- Inserts de VENTAS
 INSERT INTO Session_Product_Sales (selling_session_id, selling_session_product_id, product_name, sale_price) VALUES (1, 1, 'Naranjas', 100);
